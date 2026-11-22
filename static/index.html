@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="HAWIYA opens up iris recognition, from a living eye photograph to the mathematics of comparing a pattern.">
+<meta name="theme-color" content="#101b1c">
+<title>HAWIYA — The pattern within</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght,SOFT,WONK@9..144,400,0,1;9..144,600,0,1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/styles.css?v=8">
+</head>
+<body>
+<a class="skip" href="#begin">Skip to eye lab</a>
+<header class="nav"><div class="shell nav-inside">
+  <a class="wordmark" href="#top" aria-label="HAWIYA home"><span class="symbol">◉</span><span>HAWIYA<small>THE IRIS PROJECT</small></span></a>
+  <nav aria-label="Navigation"><a href="#story">The idea</a><a href="#begin">Explore</a><a href="#science">The science</a></nav>
+  <span class="ready-chip" id="readyChip"><b></b><span id="readyText">Connecting models</span></span>
+</div></header>
+<main id="top">
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="shell hero-inner">
+      <div class="hero-copy"><div class="section-id"><span class="pulse"></span> A LOOK BENEATH THE SURFACE <span class="thin">/ 2026</span></div>
+        <h1 id="heroTitle">Every eye has <i>a story.</i><br>Here is how a computer <em>reads its pattern.</em></h1>
+        <p class="hero-sub">An eye looks simple until you get close. Follow one photograph through real detection, a remarkable geometric transformation, and an AI that turns texture into numbers.</p>
+        <div class="hero-links"><a class="action primary" href="#begin">Explore an eye <span>↗</span></a><a class="action secondary" href="#story">Understand the idea <span>↓</span></a></div>
+        <div class="hero-stats"><span><b>02</b><small>trained models</small></span><span><b>512</b><small>measured features</small></span><span><b>07</b><small>steps unveiled</small></span></div>
+      </div>
+      <div class="hero-eye"><img src="/static/assets/hero_eye.png" alt="Detailed editorial image of a human iris" loading="eager"><div class="hero-image-shade"></div><span class="hero-photo-tag">THE PATTERN<br>WITHIN</span><div class="hero-corner tl"></div><div class="hero-corner br"></div><span class="hero-index">FASCINATION / 01</span></div>
+    </div>
+    <div class="hero-baseline shell"><span>AN INTERACTIVE FIELD GUIDE TO IRIS RECOGNITION</span><span>SCROLL TO EXPLORE ↓</span></div>
+  </section>
+  <section id="story" class="premise"><div class="shell premise-grid"><div><span class="chapter">CHAPTER 01 — THE QUESTION</span><h2>What makes an iris <i>recognizable?</i></h2></div><div class="premise-copy"><p>Look at your eye in a mirror. The colored ring is not a flat color. It has fine lines, folds, openings, and tiny shapes.</p><p>But photographs change. The camera moves. The light changes. Your pupil grows and shrinks. Before a computer can compare two eyes, it must solve a harder question:</p><blockquote>How do we turn two different photographs into patterns measured in the same way?</blockquote><a href="#mechanism" class="ink-link">See the mathematical trick <span>↗</span></a></div></div></section>
+  <section id="begin" class="lab-intro shell"><div class="eyebrow">CHAPTER 02 — TAKE CONTROL</div><div class="lab-intro-line"><h2>Choose the eye.<br><i>Trace the science.</i></h2><p>Two photographs are selected for you. Open any of the seven stages and see what YOLO and ArcIris found. Choose a genuinely different iris, or upload another eye to run a new comparison.</p></div></section>
+  <section class="specimens shell" aria-label="Eye photo gallery">
+    <div class="specimen-head"><span>THE EYE LIBRARY <b>05 DIFFERENT IRIS PHOTOGRAPHS</b></span><span>SELECT EYE A OR EYE B</span></div>
+    <p class="gallery-tip">Choose <strong>two different photographs</strong> to explore how the system compares different irises. Choose the same photograph for A and B to inspect an identical-image comparison.</p>
+    <div class="specimen-grid" id="specimenGrid">
+      <article class="specimen" data-sample="original"><div class="specimen-img"><img src="/api/samples/original" alt="Reference iris: original HAWIYA photograph" loading="eager"><span class="stamp">01 / BLUE</span></div><div class="specimen-info"><div><strong>HAWIYA reference</strong><span>Original blue iris</span></div><div class="specimen-choices"><button type="button" data-which="a" data-sample="original" aria-label="Choose HAWIYA reference as eye A">A</button><button type="button" data-which="b" data-sample="original" aria-label="Choose HAWIYA reference as eye B">B</button></div></div></article>
+      <article class="specimen" data-sample="green"><div class="specimen-img"><img src="/api/samples/green" alt="Green human iris photographed by Skitterphoto" loading="eager"><span class="stamp">02 / GREEN</span></div><div class="specimen-info"><div><strong>Green iris</strong><span>Skitterphoto · different iris</span></div><div class="specimen-choices"><button type="button" data-which="a" data-sample="green" aria-label="Choose Green iris as eye A">A</button><button type="button" data-which="b" data-sample="green" aria-label="Choose Green iris as eye B">B</button></div></div></article>
+      <article class="specimen" data-sample="brown"><div class="specimen-img"><img src="/api/samples/brown" alt="Brown human iris photographed by Entertheninja" loading="eager"><span class="stamp">03 / BROWN</span></div><div class="specimen-info"><div><strong>Brown iris</strong><span>Entertheninja · different iris</span></div><div class="specimen-choices"><button type="button" data-which="a" data-sample="brown" aria-label="Choose Brown iris as eye A">A</button><button type="button" data-which="b" data-sample="brown" aria-label="Choose Brown iris as eye B">B</button></div></div></article>
+      <article class="specimen" data-sample="amber"><div class="specimen-img"><img src="/api/samples/amber" alt="Amber-brown human iris by Bobbyphotographer" loading="eager"><span class="stamp">04 / AMBER</span></div><div class="specimen-info"><div><strong>Amber iris</strong><span>Bobbyphotographer · different iris</span></div><div class="specimen-choices"><button type="button" data-which="a" data-sample="amber" aria-label="Choose Amber iris as eye A">A</button><button type="button" data-which="b" data-sample="amber" aria-label="Choose Amber iris as eye B">B</button></div></div></article>
+      <article class="specimen" data-sample="hazel"><div class="specimen-img"><img src="/api/samples/hazel" alt="Hazel human eye photographed by Dzenanz" loading="eager"><span class="stamp">05 / HAZEL</span></div><div class="specimen-info"><div><strong>Hazel iris</strong><span>Dzenanz · different iris</span></div><div class="specimen-choices"><button type="button" data-which="a" data-sample="hazel" aria-label="Choose Hazel iris as eye A">A</button><button type="button" data-which="b" data-sample="hazel" aria-label="Choose Hazel iris as eye B">B</button></div></div></article>
+    </div>
+    <div class="upload-bar"><div><strong>Or bring your own photograph</strong><span>Sharp, close-up images work best. Your image stays in the local analysis session.</span></div><div class="upload-actions"><label for="uploadA" class="outline-btn">Upload eye A ↗</label><input id="uploadA" type="file" accept="image/jpeg,image/png,image/webp" hidden><label for="uploadB" class="outline-btn">Upload eye B ↗</label><input id="uploadB" type="file" accept="image/jpeg,image/png,image/webp" hidden><label for="phoneA" class="outline-btn phone-input">Use phone camera ↗</label><input id="phoneA" type="file" accept="image/*" capture="environment" hidden></div></div>
+  </section>
+  <section class="analysis-bg" id="analysis"><div class="shell">
+    <div class="workspace-head"><div><span class="chapter light-chapter">CHAPTER 03 — INSIDE THE ENGINE</span><h2>Watch the image <i>change.</i></h2><p>We reveal each completed stage from the actual processing pipeline. Choose a result to inspect the image and see exactly what happened.</p></div><div class="workspace-mode"><span class="live-dot"></span><span id="serverState">Checking engine</span></div></div>
+    <div class="selected-pair">
+      <div class="selected-eye"><img id="selectedAImg" alt="Selected eye A"><div><small>EYE A / REFERENCE</small><strong id="selectedAName">Choose an eye above</strong></div></div>
+      <div class="pair-divider">×</div>
+      <div class="selected-eye"><img id="selectedBImg" alt="Selected eye B"><div><small>EYE B / COMPARISON</small><strong id="selectedBName">Choose a second eye</strong></div></div>
+      <div class="pair-actions"><button id="analyzeBtn" type="button" class="action primary" disabled>Analyze eye A <span>↗</span></button><button id="compareBtn" type="button" class="action outline-light" disabled>Compare A + B <span>↗</span></button></div>
+    </div>
+    <div id="jobMessage" class="job-message" role="status">Opening the prepared eye study…</div>
+    <div class="workspace-grid">
+      <aside class="process-rail"><div class="process-head">THE JOURNEY <span>7 STAGES</span></div><div id="steps" class="process-steps">
+        <button type="button" data-step="0" class="process-step active"><span class="snum">01</span><span><strong>Capture</strong><small>Pixels &amp; clarity</small></span><b class="step-status"></b></button>
+        <button type="button" data-step="1" class="process-step"><span class="snum">02</span><span><strong>Find the iris</strong><small>YOLO segmentation</small></span><b class="step-status"></b></button>
+        <button type="button" data-step="2" class="process-step"><span class="snum">03</span><span><strong>Draw the boundaries</strong><small>Circle fitting</small></span><b class="step-status"></b></button>
+        <button type="button" data-step="3" class="process-step"><span class="snum">04</span><span><strong>Unroll the ring</strong><small>Rubber-sheet mapping</small></span><b class="step-status"></b></button>
+        <button type="button" data-step="4" class="process-step"><span class="snum">05</span><span><strong>Reveal the texture</strong><small>Grayscale &amp; gamma</small></span><b class="step-status"></b></button>
+        <button type="button" data-step="5" class="process-step"><span class="snum">06</span><span><strong>Describe it</strong><small>ArcIris / 512 values</small></span><b class="step-status"></b></button>
+        <button type="button" data-step="6" class="process-step"><span class="snum">07</span><span><strong>Compare two eyes</strong><small>Cosine similarity</small></span><b class="step-status"></b></button>
+      </div><div class="rail-remark">THE RESULTS IN EACH STAGE COME FROM YOUR TRAINED MODELS.</div></aside>
+      <div class="inspector"><div class="inspector-heading"><div><span id="inspectKicker">STEP 01 / THE PHOTOGRAPH</span><h3 id="inspectTitle">It begins with pixels.</h3></div><div class="inspector-switch" role="group" aria-label="Explanation depth"><button id="modePlain" class="active" type="button">In plain words</button><button id="modeDeep" type="button">Technical notes</button></div></div>
+        <div id="inspectMedia" class="inspect-media" aria-live="polite"><div class="empty-stage"><div class="camera-box">◎</div><p>Choose your first eye above to begin the journey.</p></div></div>
+        <div class="inspector-under"><p id="inspectExplanation"></p><div id="inspectFacts" class="inspect-facts"></div></div>
+        <div class="inspector-controls"><button id="prevStep" type="button" class="ghost-light">← Back</button><span id="inspectCount">01 / 07</span><button id="nextStep" type="button" class="ghost-light">Next step →</button></div>
+      </div>
+    </div>
+  </div></section>
+  <section id="mechanism" class="mechanism-section"><div class="shell">
+    <span class="chapter">CHAPTER 04 — THE BEAUTIFUL PART</span>
+    <div class="mechanism-heading"><h2>Unwrap a circle.<br><i>Keep the pattern.</i></h2><p>This is the step most people never see. A circular ring becomes a flat strip, using a position calculated for every pixel. Try moving through the iris and watch where your chosen point lands.</p></div>
+    <div class="mechanism-lab"><div class="mechanism-canvas"><div class="mech-views"><div class="mech-photo"><div class="mech-mini-title">THE SOURCE / AN EYE</div><canvas id="sourceCanvas" width="560" height="440" aria-label="Source iris with selected sampled pixel"></canvas><p>Move the sliders. The circle and the orange point are recalculated from the selected photograph.</p></div><div class="mech-arrow">→</div><div class="mech-strip"><div class="mech-mini-title">THE RESULT / A FLAT STRIP</div><canvas id="stripCanvas" width="512" height="128" aria-label="Unwrapped pixels of the selected iris"></canvas><div class="strip-axes"><span>0°</span><span>180°</span><span>360°</span></div><p id="coordReadout">Each column is an angle. Each row is a distance from the pupil.</p></div></div></div>
+      <aside class="mechanism-controls"><span class="micro">THE MATHEMATICS YOU CAN TOUCH</span><h3>Move one point.<br>Watch both images.</h3>
+        <label class="slider-label" for="angle"><span>Angle around the pupil</span><output id="angleOut">90°</output></label><input id="angle" type="range" min="0" max="359" value="90" step="1">
+        <label class="slider-label" for="depth"><span>Distance across the iris</span><output id="depthOut">50%</output></label><input id="depth" type="range" min="0" max="100" value="50" step="1">
+        <div class="extra-sliders"><label class="slider-label" for="inner"><span>Pupil edge adjustment</span><output id="innerOut">0 px</output></label><input id="inner" type="range" min="-20" max="20" value="0" step="1">
+        <label class="slider-label" for="outer"><span>Iris edge adjustment</span><output id="outerOut">0 px</output></label><input id="outer" type="range" min="-20" max="20" value="0" step="1"></div>
+        <div class="formula-note"><b>THE RULE</b><code>P(r, θ) = (1 − r) · PupilEdge(θ) + r · IrisEdge(θ)</code><p>For every angle and depth, the browser calculates a pixel location on the original photograph. That pixel becomes part of the strip.</p></div>
+        <div id="mechStatus" class="mech-status">After model analysis, 0 px means the original YOLO-fitted circle.</div>
+      </aside>
+    </div>
+  </div></section>
+  <section id="science" class="science-section"><div class="shell"><div class="science-top"><span class="chapter light-chapter">CHAPTER 05 — BEYOND THE IMAGE</span><h2>Not magic.<br><i>Mathematics &amp; learning.</i></h2><p>Follow the three ideas that make the full HAWIYA pipeline work. These are the choices behind the code, not just labels on a flowchart.</p></div>
+    <div class="science-articles">
+      <article><span>01 / SEEING</span><h3>YOLO doesn't know a name. It knows a shape.</h3><p>Our segmentation model predicts two regions: the iris, a textured colored ring, and the pupil, its dark opening. We use these regions to measure two boundaries. When the image is too blurred, too distant, or poorly lit, the system may not find both regions—and the pipeline stops rather than inventing a result.</p><div class="science-detail"><strong>It produces</strong><span>Pixel masks → fitted circles → geometric coordinates</span></div></article>
+      <article><span>02 / GEOMETRY</span><h3>One standard shape from many photographs.</h3><p>The pupil changes size, even in the same person. A fixed crop of the image would move across different iris details. Instead, the rubber-sheet method samples between the pupil boundary and the outer iris boundary at every angle, forming a rectangle of 64 rows by 512 columns.</p><div class="science-detail"><strong>It produces</strong><span>64 × 512 sampled texture, with two prepared views</span></div></article>
+      <article><span>03 / LEARNING</span><h3>Five hundred and twelve numbers. One texture description.</h3><p>ResNet100 in ArcIris is a trained neural network. It reads the normalized pattern and returns a feature vector with 512 values. To compare two vectors, we calculate cosine similarity, based on the angle between them. The score measures likeness; it is not a person's identity or a probability of being the same person.</p><div class="science-detail"><strong>It produces</strong><span>512-dimensional vectors → cosine similarity</span></div></article>
+    </div>
+    <div class="science-equation"><span>THE COMPARISON, EXPLAINED</span><div class="equation">similarity(A, B) = Σ(Aᵢ × Bᵢ) / (‖A‖ × ‖B‖)</div><p>We compare numerical patterns, not eye colors. The more similar the directions of two feature vectors, the larger the cosine value. A matching decision requires independent testing and carefully chosen thresholds.</p></div>
+  </div></section>
+</main>
+<footer class="footer"><div class="shell footer-grid"><div><a class="footer-logo" href="#top">HAWIYA <span>◉</span></a><p>Making the hidden mechanics of iris recognition visible, one pixel at a time.</p></div><div><strong>IMAGE SOURCES</strong><p>The gallery contains five distinct iris photographs. The four additional images are sourced from Wikimedia Commons under CC0 / public domain and stored locally. See IMAGE_SOURCES.txt for original credits.</p></div><div><strong>THE ENGINE</strong><p>Original HAWIYA YOLO Iris V2<br>ArcIris ResNet100<br>Browser-based pixel-mapping lab</p><p class="quiet">Biometric similarity alone is not proof of identity.</p></div></div><div class="shell footer-end"><span>© HAWIYA / INSIDE THE IRIS</span><a href="#top">BACK TO THE TOP ↑</a></div></footer>
+<script src="/static/app.js?v=8" defer></script>
+</body></html>

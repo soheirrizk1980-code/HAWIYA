@@ -1,0 +1,33 @@
+﻿# Python environment
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local cached analysis
+demo_cache/
+
+# AI model weights
+*.pt
+*.pth
+*.onnx
+*.ckpt
+*.safetensors
+
+# Private files and credentials
+.env
+.env.*
+!.env.example
+uploads/
+private_data/
+
+# Old backups
+_V*_BACKUPS/
+_UI_UPDATE_BACKUP*/
+*.bak
+*.zip
+
+# Windows
+Thumbs.db
+Desktop.ini
