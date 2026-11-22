@@ -1,12 +1,12 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const STAGES = [
- {k:'THE PHOTOGRAPH',title:'It begins with pixels.',plain:'A camera does not send an eye to a computer. It sends a grid of tiny color values. The first challenge is getting an image that is sharp enough to show the iris texture.',deep:'The photo is decoded into an RGB image. The backend checks orientation, dimensions, brightness, contrast and focus statistics before YOLO begins. Each pixel has red, green and blue channel values.'},
- {k:'THE DETECTOR',title:'Find the colored ring.',plain:'YOLO looks for two regions: the colored iris and the dark pupil. It marks the pixels that belong to each region. It is finding a shape—not learning a person’s name.',deep:'YOLO Iris V2 is a trained instance-segmentation model. It predicts iris (class 0) and pupil (class 1) masks. Our preprocessing chooses a valid pair; detection confidence describes region detection, not identity.'},
- {k:'THE GEOMETRY',title:'Two boundaries. One ring.',plain:'The computer uses the detected shapes to calculate two circles. One follows the pupil edge and the other follows the outer edge of the iris. Now it knows exactly which ring to read.',deep:'Robust geometric circle fitting estimates the center coordinates (cx,cy) and radius r for each boundary using the predicted masks. These circles define the sampling region for normalization.'},
- {k:'THE TRANSFORMATION',title:'Unroll the iris.',plain:'Imagine opening a ring and laying it flat. HAWIYA samples the iris all the way around, from the pupil to the outer boundary, and arranges the pixels in a rectangle.',deep:'Rubber-sheet normalization maps angle θ and relative radius ρ into the source image: P(ρ,θ)=(1−ρ)·PupilEdge(θ)+ρ·IrisEdge(θ). The resulting array has 64 rows and 512 columns.'},
- {k:'THE TWO VIEWS',title:'Make the texture easier to read.',plain:'We prepare two views of the same flat iris: one in grayscale, and another with brightness adjusted. They reveal patterns using different treatments of light and dark.',deep:'The original preprocessing produces grayscale replicated across three channels and a gamma-adjusted view (γ≈0.75). Both derive from the same normalized source pixels.'},
- {k:'THE FEATURE VECTOR',title:'A pattern becomes 512 numbers.',plain:'ArcIris studies the flat texture and creates a list of 512 numbers. These numbers are a learned description of visual patterns—not a name, a photograph, or a personal ID.',deep:'ArcIris uses a trained ResNet100 backbone to create L2-normalized 512-dimensional embeddings. We calculate two embeddings, for the grayscale and gamma inputs. The chart groups adjacent feature values for display.'},
+ {k:'THE PHOTOGRAPH',title:'A photograph is made of pixels.',plain:'A camera does not send an eye to a computer. It sends a grid of tiny color values. The first challenge is getting an image that is sharp enough to show the iris texture.',deep:'The photo is decoded into an RGB image. The backend checks orientation, dimensions, brightness, contrast and focus statistics before YOLO begins. Each pixel has red, green and blue channel values.'},
+ {k:'THE DETECTOR',title:'Detect the iris.',plain:'YOLO looks for two regions: the colored iris and the dark pupil. It marks the pixels that belong to each region. It is finding a shape—not learning a person’s name.',deep:'YOLO Iris V2 is a trained instance-segmentation model. It predicts iris (class 0) and pupil (class 1) masks. Our preprocessing chooses a valid pair; detection confidence describes region detection, not identity.'},
+ {k:'THE GEOMETRY',title:'Measure the boundaries.',plain:'The computer uses the detected shapes to calculate two circles. One follows the pupil edge and the other follows the outer edge of the iris. Now it knows exactly which ring to read.',deep:'Robust geometric circle fitting estimates the center coordinates (cx,cy) and radius r for each boundary using the predicted masks. These circles define the sampling region for normalization.'},
+ {k:'THE TRANSFORMATION',title:'Normalize the iris.',plain:'Imagine opening a ring and laying it flat. HAWIYA samples the iris all the way around, from the pupil to the outer boundary, and arranges the pixels in a rectangle.',deep:'Rubber-sheet normalization maps angle θ and relative radius ρ into the source image: P(ρ,θ)=(1−ρ)·PupilEdge(θ)+ρ·IrisEdge(θ). The resulting array has 64 rows and 512 columns.'},
+ {k:'THE TWO VIEWS',title:'Prepare the texture.',plain:'We prepare two views of the same flat iris: one in grayscale, and another with brightness adjusted. They reveal patterns using different treatments of light and dark.',deep:'The original preprocessing produces grayscale replicated across three channels and a gamma-adjusted view (γ≈0.75). Both derive from the same normalized source pixels.'},
+ {k:'THE FEATURE VECTOR',title:'Extract 512 features.',plain:'ArcIris studies the flat texture and creates a list of 512 numbers. These numbers are a learned description of visual patterns—not a name, a photograph, or a personal ID.',deep:'ArcIris uses a trained ResNet100 backbone to create L2-normalized 512-dimensional embeddings. We calculate two embeddings, for the grayscale and gamma inputs. The chart groups adjacent feature values for display.'},
  {k:'THE COMPARISON',title:'Iris comparison results.',plain:'ArcIris comparison of eye A and eye B.',deep:'Grayscale and gamma cosine scores. Match categories use experimental development-test cutoffs, not a verified identity threshold.'},
 ];
 const PHASE_STAGE={quality:0,segmentation:1,circles:2,unwrap:3,encoded:5,done:5};
@@ -25,7 +25,7 @@ function previewUrl(eye){return eye?.url||''}
 function nameFor(id){return {original:'HAWIYA blue iris',green:'Green iris',brown:'Brown iris',amber:'Amber iris',hazel:'Hazel iris'}[id]||id}
 
 function applyPreparedSelection(){
-  // Render only real, previously computed outputs. No fake waiting animations.
+  // Render only real, previously computed outputs. No simulated progress indicators.
   if(!preparedCache || !eyeA?.sample) return false;
   const found=preparedCache.analyses?.[eyeA.sample];
   if(!found) return false;
@@ -284,7 +284,7 @@ function redrawMechanism(){
  ctx.fillStyle='#192b2a';ctx.fillRect(0,0,off.width,off.height);ctx.drawImage(canvasImage,dx,dy,iw*scale,ih*scale);
  const pix=ctx.getImageData(0,0,off.width,off.height),geo=getGeometry(),theta=Number($('angle').value)*Math.PI/180,depth=Number($('depth').value)/100;
  if(!geo){srcCtx.putImageData(pix,0,0);dstCtx.fillStyle='#253c38';dstCtx.fillRect(0,0,512,128);
-   $('mechStatus').textContent='The model-fitted pupil and iris circles appear here after the eye is analyzed.';
+   $('mechStatus').textContent='Analyze the image to display the measured iris and pupil boundaries.';
    $('coordReadout').textContent='Waiting for the measured iris and pupil boundaries.';return;}
  const inner=geo.pupil,outer=geo.iris;
  const pixelPoint=(t,r)=>({x:(1-r)*(inner.x+inner.r*Math.cos(t))+r*(outer.x+outer.r*Math.cos(t)),y:(1-r)*(inner.y+inner.r*Math.sin(t))+r*(outer.y+outer.r*Math.sin(t))});
@@ -296,7 +296,7 @@ function redrawMechanism(){
  const markerX=Number($('angle').value)/360*512,markerY=depth*127;
  dstCtx.fillStyle='#fff';dstCtx.fillRect(markerX,0,1.8,128);drawPoint(dstCtx,markerX,markerY,5,'#f17851');
  $('coordReadout').textContent=`${$('angle').value}° around the iris · ${$('depth').value}% between the pupil and the iris edge · source pixel (${p.x.toFixed(0)}, ${p.y.toFixed(0)}) → strip (${Math.floor(markerX)}, ${Math.floor(markerY)}).`;
- $('mechStatus').textContent='At 0 px, both circles use the real model-fitted boundaries. Change an offset to see how an error changes the normalized pixels.';
+ $('mechStatus').textContent='At 0 px, the circles show the fitted boundaries. Adjust a boundary to see the effect on the strip.';
  if(typeof window.refreshScience==='function')window.refreshScience();
 }
 function updateSliders(){
