@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght,SOFT,WONK@9..144,400,0,1;9..144,600,0,1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/styles.css?v=8">
+<link rel="stylesheet" href="/static/styles.css?v=9">
 </head>
 <body>
 <a class="skip" href="#begin">Skip to eye lab</a>
@@ -31,7 +31,18 @@
     <div class="hero-baseline shell"><span>AN INTERACTIVE FIELD GUIDE TO IRIS RECOGNITION</span><span>SCROLL TO EXPLORE ↓</span></div>
   </section>
   <section id="story" class="premise"><div class="shell premise-grid"><div><span class="chapter">CHAPTER 01 — THE QUESTION</span><h2>What makes an iris <i>recognizable?</i></h2></div><div class="premise-copy"><p>Look at your eye in a mirror. The colored ring is not a flat color. It has fine lines, folds, openings, and tiny shapes.</p><p>But photographs change. The camera moves. The light changes. Your pupil grows and shrinks. Before a computer can compare two eyes, it must solve a harder question:</p><blockquote>How do we turn two different photographs into patterns measured in the same way?</blockquote><a href="#mechanism" class="ink-link">See the mathematical trick <span>↗</span></a></div></div></section>
-  <section id="begin" class="lab-intro shell"><div class="eyebrow">CHAPTER 02 — TAKE CONTROL</div><div class="lab-intro-line"><h2>Choose the eye.<br><i>Trace the science.</i></h2><p>Two photographs are selected for you. Open any of the seven stages and see what YOLO and ArcIris found. Choose a genuinely different iris, or upload another eye to run a new comparison.</p></div></section>
+  <section id="quickstart" class="judge-quickstart" aria-labelledby="quickstartTitle">
+    <div class="shell quickstart-inner">
+      <div class="quickstart-intro"><span class="chapter">TRY IT IN TWO MINUTES</span><h2 id="quickstartTitle">An eye becomes <i>a measurable pattern.</i></h2><p><strong>The question:</strong> How can a computer compare two irises when photographs change? Follow a real AI scan, then change the geometry yourself.</p></div>
+      <div class="quickstart-actions">
+        <button class="quickstep" type="button" id="quickAnalyze"><span>01 / RUN THE AI</span><strong>Analyze eye A</strong><small>YOLO detects two boundaries; ArcIris extracts 512 features.</small></button>
+        <button class="quickstep" type="button" id="quickUnwrap"><span>02 / CHANGE ONE INPUT</span><strong>Change the iris edge</strong><small>Recompute the unwrapped pixels immediately in your browser.</small></button>
+        <button class="quickstep" type="button" id="quickCompare"><span>03 / GET A SCORE</span><strong>Compare A and B</strong><small>Run the trained AI on both photographs, not a fixed animation.</small></button>
+      </div>
+      <div id="quickProgress" class="quick-progress" role="status" aria-live="polite">Choose a step. The demo starts with two sample photographs, or you can upload your own below.</div>
+    </div>
+  </section>
+  <section id="begin" class="lab-intro shell"><div class="eyebrow">CHAPTER 02 — TAKE CONTROL</div><div class="lab-intro-line"><h2>Choose the eye.<br><i>Trace the science.</i></h2><p>Two sample eyes are selected to help you start. Press Analyze or Compare to run the models live, or upload your own images. Then experiment with the iris geometry below.</p></div></section>
   <section class="specimens shell" aria-label="Eye photo gallery">
     <div class="specimen-head"><span>THE EYE LIBRARY <b>05 DIFFERENT IRIS PHOTOGRAPHS</b></span><span>SELECT EYE A OR EYE B</span></div>
     <p class="gallery-tip">Choose <strong>two different photographs</strong> to explore how the system compares different irises. Choose the same photograph for A and B to inspect an identical-image comparison.</p>
@@ -52,7 +63,7 @@
       <div class="selected-eye"><img id="selectedBImg" alt="Selected eye B"><div><small>EYE B / COMPARISON</small><strong id="selectedBName">Choose a second eye</strong></div></div>
       <div class="pair-actions"><button id="analyzeBtn" type="button" class="action primary" disabled>Analyze eye A <span>↗</span></button><button id="compareBtn" type="button" class="action outline-light" disabled>Compare A + B <span>↗</span></button></div>
     </div>
-    <div id="jobMessage" class="job-message" role="status">Opening the prepared eye study…</div>
+    <div id="jobMessage" class="job-message" role="status">Loading the optional precomputed sample preview…</div>
     <div class="workspace-grid">
       <aside class="process-rail"><div class="process-head">THE JOURNEY <span>7 STAGES</span></div><div id="steps" class="process-steps">
         <button type="button" data-step="0" class="process-step active"><span class="snum">01</span><span><strong>Capture</strong><small>Pixels &amp; clarity</small></span><b class="step-status"></b></button>
@@ -62,7 +73,7 @@
         <button type="button" data-step="4" class="process-step"><span class="snum">05</span><span><strong>Reveal the texture</strong><small>Grayscale &amp; gamma</small></span><b class="step-status"></b></button>
         <button type="button" data-step="5" class="process-step"><span class="snum">06</span><span><strong>Describe it</strong><small>ArcIris / 512 values</small></span><b class="step-status"></b></button>
         <button type="button" data-step="6" class="process-step"><span class="snum">07</span><span><strong>Compare two eyes</strong><small>Cosine similarity</small></span><b class="step-status"></b></button>
-      </div><div class="rail-remark">THE RESULTS IN EACH STAGE COME FROM YOUR TRAINED MODELS.</div></aside>
+      </div><div class="rail-remark">NEW UPLOADS RUN THE TRAINED MODELS. THE STARTING GALLERY CAN SHOW CACHED RESULTS.</div></aside>
       <div class="inspector"><div class="inspector-heading"><div><span id="inspectKicker">STEP 01 / THE PHOTOGRAPH</span><h3 id="inspectTitle">It begins with pixels.</h3></div><div class="inspector-switch" role="group" aria-label="Explanation depth"><button id="modePlain" class="active" type="button">In plain words</button><button id="modeDeep" type="button">Technical notes</button></div></div>
         <div id="inspectMedia" class="inspect-media" aria-live="polite"><div class="empty-stage"><div class="camera-box">◎</div><p>Choose your first eye above to begin the journey.</p></div></div>
         <div class="inspector-under"><p id="inspectExplanation"></p><div id="inspectFacts" class="inspect-facts"></div></div>
@@ -94,5 +105,5 @@
   </div></section>
 </main>
 <footer class="footer"><div class="shell footer-grid"><div><a class="footer-logo" href="#top">HAWIYA <span>◉</span></a><p>Making the hidden mechanics of iris recognition visible, one pixel at a time.</p></div><div><strong>IMAGE SOURCES</strong><p>The gallery contains five distinct iris photographs. The four additional images are sourced from Wikimedia Commons under CC0 / public domain and stored locally. See IMAGE_SOURCES.txt for original credits.</p></div><div><strong>THE ENGINE</strong><p>Original HAWIYA YOLO Iris V2<br>ArcIris ResNet100<br>Browser-based pixel-mapping lab</p><p class="quiet">Biometric similarity alone is not proof of identity.</p></div></div><div class="shell footer-end"><span>© HAWIYA / INSIDE THE IRIS</span><a href="#top">BACK TO THE TOP ↑</a></div></footer>
-<script src="/static/app.js?v=8" defer></script>
+<script src="/static/app.js?v=9" defer></script>
 </body></html>

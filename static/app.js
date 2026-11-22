@@ -40,7 +40,7 @@ function applyPreparedSelection(){
   inspectionTouched=false;
   renderInspector();renderSteps();
   setBrowserImage(found.crop,true,found.geometry);
-  say(comparison ? 'All seven stages are ready. Explore each step or choose other photographs.' : 'The selected eye has been analyzed. Add a second photo to compare.');
+  say(comparison ? 'Sample preview loaded from previously computed AI results. Press Compare A + B to calculate again live.' : 'Sample preview loaded from previously computed AI results. Press Analyze eye A to run the models live.');
   return true;
 }
 
@@ -115,7 +115,8 @@ async function analyzeEye(){if(!eyeA||scanBusy||compareBusy)return;const serial=
   const result=await pollJob(id,'analyze');
   if(serial!==operationSerial)return;
   analysis=result;analysisPhase='done';renderSteps();renderInspector();setBrowserImage(result.crop,true,result.geometry);
-  say('Analysis complete. Open each stage to study the actual output, or move your point in the pixel-mapping lab below.');
+  say('Live AI analysis complete. Open the stages, then change the iris edge in the browser-based lab.');
+  setQuickProgress('Live AI analysis complete. Now change the iris edge to see the geometry recalculate.');
  }catch(err){analysisPhase='error';say(err.message,true);renderSteps();renderInspector()}
  finally{scanBusy=false;refreshButtons()}
 }
@@ -128,7 +129,8 @@ async function compareEyes(){if(!eyeA||!eyeB||compareBusy||scanBusy)return;const
   if(serial!==operationSerial)return;
   comparison=result;analysis=result.first;analysisPhase='done';
   setBrowserImage(result.first.crop,true,result.first.geometry);
-  say('Comparison complete. Results shown below.');
+  say('Live ArcIris comparison complete. The two displayed scores were computed from the selected photographs.');
+  setQuickProgress('Live comparison complete. Inspect the scores and try uploading another eye.');
   renderSteps();renderInspector();
  }catch(err){say(err.message,true)}finally{compareBusy=false;refreshButtons()}
 }
@@ -299,11 +301,37 @@ function updateSliders(){
   text('angleOut',$('angle').value+'°');text('depthOut',$('depth').value+'%');
   text('innerOut',String($('inner').value)+' px');text('outerOut',String($('outer').value)+' px');
   if(imageReady)redrawMechanism();
+  if(useFitted && sourceGeom && (Number($('inner').value)!==0 || Number($('outer').value)!==0)) {
+    setQuickProgress('The browser recomputed the iris strip from your changed boundaries. ArcIris scores have NOT changed; rerun model processing for a new AI score.');
+  }
 }
 ['angle','depth','inner','outer'].forEach(id=>$(id).addEventListener('input',updateSliders));
 // Clicking the eye must NOT erase YOLO's measured geometry. Keep source data intact.
 // Visitors can experiment by changing boundary offsets instead.
 
+function setQuickProgress(message){
+ const node=$('quickProgress');if(node)node.textContent=message;
+}
+function quickGo(id){const node=$(id);if(node)node.scrollIntoView({behavior:'smooth',block:'start'});}
+function bindQuickStart(){
+ const analyze=$('quickAnalyze'),unwrap=$('quickUnwrap'),compare=$('quickCompare');
+ if(analyze)analyze.addEventListener('click',()=>{
+   quickGo('analysis');
+   if(!eyeA){setQuickProgress('Select eye A from the library first.');return;}
+   setQuickProgress('Running real YOLO and ArcIris analysis on eye A…');analyzeEye();
+ });
+ if(unwrap)unwrap.addEventListener('click',()=>{
+   quickGo('mechanism');
+   if(!useFitted){setQuickProgress('First analyze eye A to load its measured iris boundaries.');return;}
+   const slider=$('outer');slider.value=slider.value==='0'?'8':'0';
+   updateSliders();slider.focus({preventScroll:true});
+ });
+ if(compare)compare.addEventListener('click',()=>{
+   quickGo('analysis');
+   if(!eyeA||!eyeB){setQuickProgress('Select both eye A and eye B first.');return;}
+   setQuickProgress('Running real YOLO and ArcIris comparison for both eyes…');compareEyes();
+ });
+}
 function bindEvents(){
  document.querySelectorAll('button[data-which][data-sample]').forEach(b=>b.addEventListener('click',()=>chooseSample(b.dataset.sample,b.dataset.which)));
  $('uploadA').addEventListener('change',ev=>chooseFile(ev.target.files[0],'a'));
@@ -333,10 +361,10 @@ async function bootstrap(){
    await chooseSample(preparedCache?.defaultB || 'green','b');
  } finally {booting=false}
  if(applyPreparedSelection()){
-   text('readyText','YOLO + ArcIris results ready');text('serverState','Seven calculated stages ready');
+   text('readyText','AI sample preview ready');text('serverState','Cached AI results loaded · run a live scan');
  }else{
-   say('The two photographs are selected. Run PREPARE_SAMPLES.bat once to load their real AI results before visitors arrive.',true);
+   say('Two sample photos selected. Press Analyze eye A or Compare A + B for live model output. Precomputed sample results are optional.');
    renderInspector();renderSteps();
  }
 }
-bindEvents();bootstrap();
+bindEvents();bindQuickStart();bootstrap();
