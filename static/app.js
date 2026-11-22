@@ -202,6 +202,7 @@ function renderInspector(){
  if(stage===6){if(!comparison){box.append(outputPlaceholder('Choose a second photo.','Press “Compare A + B” to calculate a score with our trained ArcIris model.'));}else{
    const c=e('div','comparison-result');const v=e('div','comparison-big');v.append(img(comparison.first?.detected,'Processed eye A'),e('span','','↔'),img(comparison.second?.detected,'Processed eye B'));c.append(v,renderMatchResult(comparison));box.append(c);facts=['SIMILARITY SCORES: −1 TO +1','YOLO + ARCIRIS RESNET100','EXPERIMENTAL THRESHOLDS'];}}
  factLine(facts);
+ if(typeof window.refreshScience==='function')window.refreshScience();
 }
 function stepTo(index){stage=Math.max(0,Math.min(6,index));inspectionTouched=true;renderInspector();renderSteps()}
 
@@ -296,6 +297,7 @@ function redrawMechanism(){
  dstCtx.fillStyle='#fff';dstCtx.fillRect(markerX,0,1.8,128);drawPoint(dstCtx,markerX,markerY,5,'#f17851');
  $('coordReadout').textContent=`${$('angle').value}° around the iris · ${$('depth').value}% between the pupil and the iris edge · source pixel (${p.x.toFixed(0)}, ${p.y.toFixed(0)}) → strip (${Math.floor(markerX)}, ${Math.floor(markerY)}).`;
  $('mechStatus').textContent='At 0 px, both circles use the real model-fitted boundaries. Change an offset to see how an error changes the normalized pixels.';
+ if(typeof window.refreshScience==='function')window.refreshScience();
 }
 function updateSliders(){
   text('angleOut',$('angle').value+'°');text('depthOut',$('depth').value+'%');

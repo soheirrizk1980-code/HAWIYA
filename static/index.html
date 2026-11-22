@@ -8,13 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght,SOFT,WONK@9..144,400,0,1;9..144,600,0,1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/static/styles.css?v=9">
+<link rel="stylesheet" href="/static/styles.css?v=10">
 </head>
 <body>
 <a class="skip" href="#begin">Skip to eye lab</a>
 <header class="nav"><div class="shell nav-inside">
   <a class="wordmark" href="#top" aria-label="HAWIYA home"><span class="symbol">◉</span><span>HAWIYA<small>THE IRIS PROJECT</small></span></a>
-  <nav aria-label="Navigation"><a href="#story">The idea</a><a href="#begin">Explore</a><a href="#science">The science</a></nav>
+  <nav aria-label="Navigation"><a href="#story">The idea</a><a href="#begin">Explore</a><a href="#deep-dive">Deep Dive</a><a href="#research">Research</a></nav>
   <span class="ready-chip" id="readyChip"><b></b><span id="readyText">Connecting models</span></span>
 </div></header>
 <main id="top">
@@ -95,7 +95,53 @@
       </aside>
     </div>
   </div></section>
-  <section id="science" class="science-section"><div class="shell"><div class="science-top"><span class="chapter light-chapter">CHAPTER 05 — BEYOND THE IMAGE</span><h2>Not magic.<br><i>Mathematics &amp; learning.</i></h2><p>Follow the three ideas that make the full HAWIYA pipeline work. These are the choices behind the code, not just labels on a flowchart.</p></div>
+  
+<section id="deep-dive" class="data-lab" aria-labelledby="dataLabTitle">
+ <div class="shell">
+  <div class="data-lab-heading"><div><span class="chapter">CHAPTER 05 — DEEP DIVE / LIVE MEASUREMENTS</span><h2 id="dataLabTitle">Every number has <i>a reason.</i></h2><p>These readings come from the selected eye's actual AI analysis. The experiments below change pixels in your browser; they do not secretly re-run the neural networks.</p></div><a class="ink-link" href="#research">See methods and limitations ↗</a></div>
+  <div id="dataOrigin" class="data-origin" role="status">Waiting for an eye analysis. Run Analyze eye A to see model-computed values.</div>
+  <div class="data-metrics" aria-label="Live scientific metrics">
+    <div><span>IMAGE RESOLUTION</span><strong id="mResolution">—</strong><small>Source pixels</small></div>
+    <div><span>BRIGHTNESS</span><strong id="mBrightness">—</strong><small>Mean grayscale, 0–255</small></div>
+    <div><span>FOCUS PROXY</span><strong id="mFocus">—</strong><small>Laplacian variance, not an accuracy score</small></div>
+    <div><span>IRIS / PUPIL</span><strong id="mRatio">—</strong><small>Radius ratio, not person ID</small></div>
+    <div><span>IRIS REGION</span><strong id="mArea">—</strong><small>Approx. circle-ring area in px²</small></div>
+    <div><span>FEATURE OUTPUT</span><strong id="mFeatures">—</strong><small>512-D ArcIris vector, 16 grouped means shown</small></div>
+  </div>
+  <div class="data-panels">
+   <article class="data-panel"><div class="data-panel-kicker">01 / FROM LIGHT TO PIXELS</div><h3>What does brightness change?</h3><p>Adjust an on-screen preview and see how the grayscale histogram moves. This computes new pixel values here, <strong>not new YOLO confidence</strong>.</p>
+    <div class="data-experiment"><canvas id="lightPreview" width="360" height="220" aria-label="Brightness preview of selected eye"></canvas><canvas id="histogramCanvas" width="360" height="130" aria-label="Computed 256-bin grayscale histogram"></canvas></div>
+    <label for="lightOffset">Exposure simulation <output id="lightOut">0</output></label><input type="range" id="lightOffset" min="-90" max="90" value="0" step="5"><div class="experiment-output" id="lightMetrics">Preview mean: — / 255</div>
+   </article>
+   <article class="data-panel"><div class="data-panel-kicker">02–04 / YOLO → GEOMETRY → NORMALIZATION</div><h3>How much does an edge error matter?</h3><p>Use the real measured iris and pupil circles. Change the boundary controls above, then watch the actual browser-sampled strip and pixel changes.</p>
+    <dl class="data-definition"><div><dt>YOLO iris / pupil confidence</dt><dd id="mConf">—</dd></div><div><dt>Iris center (x, y)</dt><dd id="mIrisCenter">—</dd></div><div><dt>Pupil center (x, y)</dt><dd id="mPupilCenter">—</dd></div><div><dt>Iris / pupil radius</dt><dd id="mRadii">—</dd></div><div><dt>Adjusted annular area</dt><dd id="mAreaDelta">—</dd></div><div><dt>Strip pixel change vs 0 px edges</dt><dd id="mStripDifference">—</dd></div></dl>
+    <p class="data-footnote">The last two values are computed locally from the current slider offsets. A geometry change does not update the trained ArcIris embedding without a new model inference.</p>
+   </article>
+   <article class="data-panel"><div class="data-panel-kicker">05 / TEXTURE PREPROCESSING</div><h3>Reveal texture using gamma.</h3><p>Change the gamma curve and observe a transformed view of the unwrapped pixels. The neural network's original inputs remain unchanged.</p>
+    <canvas id="gammaPreview" width="512" height="130" aria-label="Gamma transformed iris strip preview"></canvas>
+    <label for="gammaLab">Gamma <output id="gammaOut">0.75</output></label><input type="range" id="gammaLab" min="0.4" max="2.0" value="0.75" step="0.05"><p class="experiment-output" id="gammaMetrics">Waiting for normalized texture</p>
+   </article>
+   <article class="data-panel"><div class="data-panel-kicker">06–07 / EMBEDDINGS & COMPARISON</div><h3>Numbers, not eye colors.</h3><p>ArcIris produces a normalized 512-value descriptor. Here we show the model's <strong>16 grouped means</strong>—not the private raw vector. Live comparison scores are displayed below.</p>
+    <div id="vectorBars" class="vector-bars" role="img" aria-label="16 group means computed from ArcIris features"></div>
+    <dl class="data-definition"><div><dt>Gray cosine similarity</dt><dd id="mGrayScore">—</dd></div><div><dt>Gamma cosine similarity</dt><dd id="mGammaScore">—</dd></div><div><dt>Score interpretation</dt><dd>Cosine, not match probability</dd></div></dl>
+    <p class="data-footnote">A reliable MATCH threshold requires an independent same-eye / different-eye validation dataset. Color labels in the earlier result card are experimental.</p>
+   </article>
+  </div>
+ </div>
+</section>
+<section id="research" class="research-lab" aria-labelledby="researchTitle"><div class="shell">
+ <span class="chapter light-chapter">CHAPTER 06 — RESEARCH & VALIDATION</span><h2 id="researchTitle">How far can we <i>trust the result?</i></h2><p class="research-lede">HAWIYA is a working educational prototype, not a certified biometric identity system. Explore exactly what is measured, what is inferred, and what remains unverified.</p>
+ <div class="research-grid">
+  <details open><summary>Pipeline provenance</summary><p>YOLO Iris V2 locates iris and pupil masks; geometry fits circles; the original normalization maps the ring to 64 × 512 samples; ArcIris ResNet100 extracts two 512-D descriptors from grayscale and gamma-adjusted normalized textures.</p><p>Live scan results are computed on the Python backend. The interactive strip, histogram, preview exposure and gamma experiment run in your browser. The two results are intentionally labeled separately.</p></details>
+  <details><summary>What the confidence score does — and does not — mean</summary><p>YOLO confidence measures confidence in a detected region, not the probability that a person's identity is known. Photo sharpness is a Laplacian-variance heuristic. Neither is a certified recognition-accuracy measurement.</p></details>
+  <details><summary>Why the 512 values matter</summary><p>A trained neural network encodes visual texture in a 512-dimensional embedding. Cosine similarity compares the directions of two embeddings: cos(A,B) = (A · B) / (||A|| ||B||). The 16 bars shown here are grouped means, not all 512 raw values.</p></details>
+  <details><summary>What would count as a trustworthy match?</summary><p>We must test genuinely distinct captures of the same eyes and captures of different eyes, then choose a threshold using an independent evaluation set. Report false-accept and false-reject rates, sample count, lighting conditions and failure-to-enroll cases. Until then, comparison outcomes are experimental.</p></details>
+  <details><summary>Privacy, reuse and limitations</summary><p>Iris images are sensitive biometric information. Upload only photos you have permission to use. The current server handles uploaded images for analysis; do not assume third-party hosting is private without checking deployment retention and logging. Model training provenance and licenses must be checked before public release.</p></details>
+ </div>
+ <p class="research-note">Method inspiration: rubber-sheet iris normalization (Daugman), iris segmentation (YOLO), embedding learning (ArcIris/ResNet). Consult the project repository for implementation and component licensing.</p>
+</div></section>
+
+<section id="science" class="science-section"><div class="shell"><div class="science-top"><span class="chapter light-chapter">CHAPTER 05 — BEYOND THE IMAGE</span><h2>Not magic.<br><i>Mathematics &amp; learning.</i></h2><p>Follow the three ideas that make the full HAWIYA pipeline work. These are the choices behind the code, not just labels on a flowchart.</p></div>
     <div class="science-articles">
       <article><span>01 / SEEING</span><h3>YOLO doesn't know a name. It knows a shape.</h3><p>Our segmentation model predicts two regions: the iris, a textured colored ring, and the pupil, its dark opening. We use these regions to measure two boundaries. When the image is too blurred, too distant, or poorly lit, the system may not find both regions—and the pipeline stops rather than inventing a result.</p><div class="science-detail"><strong>It produces</strong><span>Pixel masks → fitted circles → geometric coordinates</span></div></article>
       <article><span>02 / GEOMETRY</span><h3>One standard shape from many photographs.</h3><p>The pupil changes size, even in the same person. A fixed crop of the image would move across different iris details. Instead, the rubber-sheet method samples between the pupil boundary and the outer iris boundary at every angle, forming a rectangle of 64 rows by 512 columns.</p><div class="science-detail"><strong>It produces</strong><span>64 × 512 sampled texture, with two prepared views</span></div></article>
@@ -105,5 +151,6 @@
   </div></section>
 </main>
 <footer class="footer"><div class="shell footer-grid"><div><a class="footer-logo" href="#top">HAWIYA <span>◉</span></a><p>Making the hidden mechanics of iris recognition visible, one pixel at a time.</p></div><div><strong>IMAGE SOURCES</strong><p>The gallery contains five distinct iris photographs. The four additional images are sourced from Wikimedia Commons under CC0 / public domain and stored locally. See IMAGE_SOURCES.txt for original credits.</p></div><div><strong>THE ENGINE</strong><p>Original HAWIYA YOLO Iris V2<br>ArcIris ResNet100<br>Browser-based pixel-mapping lab</p><p class="quiet">Biometric similarity alone is not proof of identity.</p></div></div><div class="shell footer-end"><span>© HAWIYA / INSIDE THE IRIS</span><a href="#top">BACK TO THE TOP ↑</a></div></footer>
-<script src="/static/app.js?v=9" defer></script>
+<script src="/static/app.js?v=10" defer></script>
+<script src="/static/science_lab.js?v=10" defer></script>
 </body></html>
