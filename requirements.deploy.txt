@@ -1,0 +1,10 @@
+# Linux/CPU deployment requirements; local requirements.txt stays untouched.
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+python-multipart>=0.0.12
+ultralytics>=8.3,<9
+numpy>=1.26,<3
+opencv-python-headless>=4.8,<5
+pillow>=10,<13
+scipy>=1.11,<2
+# torch and torchvision are installed as CPU-only wheels in Dockerfile.

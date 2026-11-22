@@ -1,0 +1,23 @@
+services:
+  hawiya:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hawiya:cpu
+    restart: unless-stopped
+    ports:
+      # Local-only until we configure a reverse proxy + HTTPS for the competition.
+      - "127.0.0.1:8800:8800"
+    environment:
+      HAWIYA_AI_ROOT: /app/HAWIYA_AI
+      OMP_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "1"
+    volumes:
+      # Required: original Python driver, ArcIris source and model checkpoints.
+      - ./HAWIYA_AI:/app/HAWIYA_AI:ro
+      - hawiya_demo_cache:/app/demo_cache
+    init: true
+    stop_grace_period: 35s
+
+volumes:
+  hawiya_demo_cache:
