@@ -18,6 +18,16 @@ if not exist ".venv\.hawiya_installed" (
   echo installed>".venv\.hawiya_installed"
 )
 echo.
+echo Checking the blue-eye reference...
+.venv\Scripts\python.exe -u server.py --ensure-blue
+if errorlevel 1 (
+  echo.
+  echo ERROR: Could not prepare the blue reference. The original model files and sample photos are required.
+  echo Check the messages above, then retry.
+  pause
+  exit /b 1
+)
+echo.
 echo HAWIYA REAL AI LAB starts at http://127.0.0.1:8800
 echo Keep this window open. First model inference can be slower on CPU.
 start "" "http://127.0.0.1:8800"

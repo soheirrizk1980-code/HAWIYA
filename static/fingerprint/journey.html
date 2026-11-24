@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="#102440" name="theme-color"/>
+<meta content="A clear, visual website that explains how fingerprint devices work through simple pages and optional experiments." name="description"/>
+<title>Interactive Fingerprint Lab | HAWIYA</title>
+
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=DM+Mono:wght@400;500&amp;family=Fraunces:opsz,wght@9..144,400;9..144,600&amp;display=swap" rel="stylesheet"/><link href="journey.css?v=4" rel="stylesheet"/><link href="theme.css?v=4" rel="stylesheet"/></head>
+<body class="hawiya-fingerprint fingerprint-journey" data-fingerprint-page="journey">
+<header class="hawiya-site-nav">
+<div class="hawiya-site-inner">
+<a aria-label="HAWIYA home" class="hawiya-wordmark" href="/"><span aria-hidden="true" class="hawiya-symbol">◉</span><span>HAWIYA<small>THE BIOMETRICS PROJECT</small></span></a>
+<nav aria-label="Fingerprint lab navigation" class="hawiya-navlinks" id="hawiyaNavLinks"><a href="index.html">Overview</a><a href="mechanism.html">The mechanism</a><a href="uses.html">Uses</a><a href="questions.html">Questions</a><a aria-current="page" class="is-current" href="journey.html">Interactive lab</a></nav>
+<div class="hawiya-nav-actions"><a class="hawiya-stage-label" href="#" id="logo" title="Restart this journey">Fingerprint lab ↺</a><a class="hawiya-crosslab" href="/iris">Iris Lab ↗</a><button aria-label="Show journey stages" class="hawiya-steps-button" id="menuButton" type="button">Stages ☰</button><button aria-controls="hawiyaNavLinks" aria-expanded="false" aria-label="Open navigation" class="hawiya-nav-toggle" id="hawiyaNavToggle" type="button">Menu ☰</button></div>
+</div>
+</header>
+<div class="shell">
+<aside class="sidebar" id="sidebar">
+<div class="side-title">SIMPLE 6-PAGE JOURNEY</div>
+<nav aria-label="Website pages" id="nav">
+<button class="nav-item active" data-page="0"><span>01</span>Hero</button>
+<button class="nav-item" data-page="1"><span>02</span>What happens first?</button>
+<button class="nav-item" data-page="2"><span>03</span>The mechanism</button>
+<button class="nav-item" data-page="3"><span>04</span>Try it yourself</button>
+<button class="nav-item" data-page="4"><span>05</span>Match lab</button>
+<button class="nav-item" data-page="5"><span>06</span>Uses &amp; Q&amp;A</button>
+</nav>
+<div class="sidebar-foot">
+<div class="progress-line"><span>Progress</span><strong id="progressNumber">01 / 06</strong></div>
+<div class="progress-track"><div id="progressFill"></div></div>
+<p>This website teaches the idea first. The experiment comes later.</p>
+</div>
+</aside>
+<main id="main">
+<!-- PAGE 1 -->
+<section class="page active" data-view="0">
+<div class="hero-grid">
+<div class="hero-copy">
+<div class="eyebrow">UNVEILING TECHNOLOGY · CLEAR IN UNDER 2 MINUTES</div>
+<h1 class="clean-heading">How does a <span>fingerprint device</span> know who touched it?</h1>
+<p class="lead">It does <strong>not</strong> read your name from your finger. First it reads a pattern, then it turns that pattern into data, then it compares that data with saved records.</p>
+<div class="hero-points">
+<div><b>1</b><span>Read the finger</span></div>
+<div><b>2</b><span>Find unique features</span></div>
+<div><b>3</b><span>Save a template</span></div>
+<div><b>4</b><span>Compare for a match</span></div>
+</div>
+<div class="hero-actions">
+<button class="btn primary" data-go="1">Start the story →</button>
+<button class="btn secondary" id="bigIdeaButton">Show the big idea</button>
+</div>
+<div class="big-idea" hidden="" id="bigIdea">
+<strong>The big idea:</strong> a fingerprint scanner stores and compares <em>features</em>, then links a match to an ID.
+          </div>
+</div>
+<div class="hero-visual card">
+<div class="card-top"><span>FINGERPRINT DEVICE</span><span class="status">READY</span></div>
+<div class="device-showcase">
+<div class="hand-mini">
+<div class="mini-finger"></div>
+</div>
+<div class="scanner-mini">
+<div class="scanner-window"></div>
+<div class="scanner-base"></div>
+</div>
+<canvas aria-label="Fingerprint illustration" height="380" id="heroCanvas" width="480"></canvas>
+</div>
+<div class="visual-note">Touch → scan → features → match</div>
+</div>
+</div>
+<div class="intro-banner">
+<div class="banner-item"><span>Easy to understand</span><b>Large text + short steps</b></div>
+<div class="banner-item"><span>Interactive</span><b>Experiment starts on Page 4</b></div>
+<div class="banner-item"><span>Safe</span><b>No camera, upload, or real prints</b></div>
+</div>
+</section>
+<!-- PAGE 2 -->
+<section class="page" data-view="1">
+<div class="page-head">
+<div class="eyebrow">PAGE 2 · WHAT HAPPENS WHEN YOU PUT YOUR FINGER?</div>
+<h2 class="clean-heading">First, the device simply reads the surface of your finger</h2>
+<p>When you place your finger on the sensor, the device sees the <strong>ridges</strong> and <strong>valleys</strong> on your skin. It turns that into a digital image or signal that software can understand.</p>
+</div>
+<div class="story-strip">
+<div class="story-card">
+<div class="story-ill touch-ill">
+<div class="finger-icon"></div>
+<div class="sensor-icon"></div>
+</div>
+<h3 class="clean-heading">1. Touch</h3>
+<p>You place your finger on the sensor surface.</p>
+</div>
+<div class="story-arrow">→</div>
+<div class="story-card">
+<div class="story-ill scan-ill">
+<div class="grid-ill"></div>
+</div>
+<h3 class="clean-heading">2. Scan</h3>
+<p>The device reads the ridge pattern on that small area.</p>
+</div>
+<div class="story-arrow">→</div>
+<div class="story-card">
+<div class="story-ill pattern-ill">
+<canvas aria-label="Fingerprint pattern preview" height="140" id="patternPreview" width="220"></canvas>
+</div>
+<h3 class="clean-heading">3. Pattern</h3>
+<p>The result looks like a fingerprint image or map.</p>
+</div>
+<div class="story-arrow">→</div>
+<div class="story-card">
+<div class="story-ill data-ill">
+<div class="data-chip big">Template = important points</div>
+</div>
+<h3 class="clean-heading">4. Data</h3>
+<p>Software keeps the important points, not the person's name.</p>
+</div>
+</div>
+<div class="split two-large">
+<div class="card image-card">
+<div class="card-top"><span>WHAT THE SENSOR MAY SEE</span><span>SIMPLIFIED VIEW</span></div>
+<div class="sensor-photo">
+<div class="photo-frame"><canvas height="300" id="sensorPhotoCanvas" width="480"></canvas></div>
+</div>
+<p class="caption">Dark and light lines show ridges and valleys. This is the starting point.</p>
+</div>
+<div class="card text-card">
+<div class="card-top"><span>VERY SIMPLE EXPLANATION</span><span>1 MINUTE</span></div>
+<ul class="simple-list">
+<li><b>The sensor does not know your name.</b></li>
+<li><b>It reads a physical pattern</b> on the finger.</li>
+<li><b>Software finds special points</b> in that pattern.</li>
+<li><b>Those points are saved as a template.</b></li>
+<li><b>A new scan is compared</b> with saved templates later.</li>
+</ul>
+<div class="fact-box">
+<b>Main message:</b> the device knows a person only after a pattern matches a saved record.
+          </div>
+</div>
+</div>
+<div class="page-actions"><button class="btn subtle" data-go="0">← Previous</button><button class="btn primary" data-go="2">Show me the mechanism →</button></div>
+</section>
+<!-- PAGE 3 -->
+<section class="page" data-view="2">
+<div class="page-head">
+<div class="eyebrow">PAGE 3 · THE MECHANISM</div>
+<h2 class="clean-heading">How does the device understand the fingerprint?</h2>
+<p>Different devices use different sensors, but the logic is similar: capture the pattern, detect the useful features, then store them as a template.</p>
+</div>
+<div class="mechanism-grid">
+<div class="card mechanism-card">
+<div class="card-top"><span>SENSOR TYPES</span><span>CLICK TO SWITCH</span></div>
+<div class="sensor-tabs">
+<button class="sensor-tab active" data-sensor="capacitive">Capacitive</button>
+<button class="sensor-tab" data-sensor="optical">Optical</button>
+<button class="sensor-tab" data-sensor="ultrasonic">Ultrasonic</button>
+</div>
+<div class="sensor-visual" id="sensorVisual">
+<div class="sensor-illustration">
+<div class="layer top"></div>
+<div class="layer middle"></div>
+<div class="layer bottom"></div>
+</div>
+<div class="sensor-desc" id="sensorDescription"></div>
+</div>
+</div>
+<div class="card mechanism-card">
+<div class="card-top"><span>FROM IMAGE TO TEMPLATE</span><span>STEP BY STEP</span></div>
+<div class="logic-steps-large">
+<div class="logic-box active" data-logic="0"><b>1</b><span>Fingerprint image</span></div>
+<div class="logic-box" data-logic="1"><b>2</b><span>Minutiae points</span></div>
+<div class="logic-box" data-logic="2"><b>3</b><span>Saved template</span></div>
+</div>
+<div class="logic-stage">
+<canvas height="280" id="logicCanvas" width="500"></canvas>
+<div class="logic-text">
+<h3 class="clean-heading" id="logicTitle">Fingerprint image</h3>
+<p id="logicText">The software starts with a fingerprint pattern from the sensor.</p>
+<div class="template-box" id="templateBox">Template preview will appear here.</div>
+</div>
+</div>
+</div>
+</div>
+<div class="image-row three">
+<div class="use-image-card card small-card">
+<div class="icon-wrap">📱</div>
+<h3 class="clean-heading">Phones</h3>
+<p>Quick unlocking for one saved user.</p>
+</div>
+<div class="use-image-card card small-card">
+<div class="icon-wrap">🚪</div>
+<h3 class="clean-heading">Doors</h3>
+<p>Access control for authorized people only.</p>
+</div>
+<div class="use-image-card card small-card">
+<div class="icon-wrap">🏫</div>
+<h3 class="clean-heading">Attendance</h3>
+<p>Record who checked in and when.</p>
+</div>
+</div>
+<div class="page-actions"><button class="btn subtle" data-go="1">← Previous</button><button class="btn primary" data-go="3">Try the experiment →</button></div>
+</section>
+<!-- PAGE 4 -->
+<section class="page" data-view="3">
+<div class="page-head">
+<div class="eyebrow">PAGE 4 · OPTIONAL EXPERIMENT</div>
+<h2 class="clean-heading">Now try the scanner yourself</h2>
+<p>This page is the experiment. Move the virtual finger and change the scan quality to see how the reading changes.</p>
+</div>
+<div class="split two-large">
+<div class="card stage-card">
+<div class="card-top"><span>TOUCH THE SENSOR</span><span class="status">LIVE</span></div>
+<div class="device-stage" id="deviceStage">
+<div class="stage-finger" id="stageFinger">
+<div class="nail"></div>
+<div class="finger-lines"></div>
+</div>
+<div class="big-scanner" id="bigScanner">
+<div class="scanner-grid" id="scannerGrid"></div>
+<div class="sweep"></div>
+</div>
+</div>
+<div class="stage-note"><span id="contactText">Finger above sensor</span><strong id="contactValue">0% contact</strong></div>
+</div>
+<div class="card controls-card">
+<div class="card-top"><span>CHANGE THE INPUTS</span><span>SEE THE OUTPUT</span></div>
+<label class="big-label" for="fingerSlider">Finger position <output id="fingerOutput">0%</output></label>
+<input id="fingerSlider" max="100" min="0" type="range" value="0"/>
+<label class="big-label" for="qualitySlider">Scan quality <output id="qualityOutput">85%</output></label>
+<input id="qualitySlider" max="100" min="25" type="range" value="85"/>
+<div class="button-row"><button class="btn primary" id="autoMove">Auto move</button><button class="btn secondary" id="togglePixels">Show cells</button></div>
+<div class="reading-card">
+<h3 class="clean-heading">What the sensor reads</h3>
+<canvas height="220" id="scanCanvas" width="420"></canvas>
+<p id="scanSummary">The reading becomes clearer when contact and quality improve.</p>
+</div>
+</div>
+</div>
+<div class="page-actions"><button class="btn subtle" data-go="2">← Previous</button><button class="btn primary" data-go="4">Go to matching →</button></div>
+</section>
+<!-- PAGE 5 -->
+<section class="page" data-view="4">
+<div class="page-head">
+<div class="eyebrow">PAGE 5 · MATCH LAB</div>
+<h2 class="clean-heading">Which fingerprint matches the saved one?</h2>
+<p>Choose a saved person, then test a new scan from Alex, Melissa, or Jack. The score is calculated in the browser from feature points.</p>
+</div>
+<div class="people-row" id="savedPeople">
+<button class="person-card active" data-enroll="0"><span class="avatar a">A</span><span><strong>Alex</strong><small>Saved print A</small></span></button>
+<button class="person-card" data-enroll="1"><span class="avatar m">M</span><span><strong>Melissa</strong><small>Saved print B</small></span></button>
+<button class="person-card" data-enroll="2"><span class="avatar j">J</span><span><strong>Jack</strong><small>Saved print C</small></span></button>
+</div>
+<div class="lab-grid">
+<div class="card compare-card">
+<div class="compare-head">
+<div><span>SAVED TEMPLATE</span><b id="savedName">Alex</b></div>
+<div><span>NEW SCAN</span><b id="scanName">Alex</b></div>
+</div>
+<div class="compare-canvases">
+<canvas height="320" id="savedCanvas" width="320"></canvas>
+<canvas height="320" id="matchCanvas" width="320"></canvas>
+</div>
+<div class="score-card">
+<div class="score-line"><span>Match score</span><strong id="scoreValue">100%</strong></div>
+<div class="score-track"><div id="scoreFill"></div></div>
+<div class="decision yes" id="decision">MATCH</div>
+<p class="decision-text" id="decisionText">The new scan is close enough to the saved template.</p>
+</div>
+</div>
+<div class="card control-card">
+<div class="card-top"><span>TEST A NEW SCAN</span><span>EDIT THE INPUTS</span></div>
+<div class="candidate-list" id="candidateList">
+<button class="candidate active" data-scan="0"><span class="avatar a">A</span><b>Alex</b><small>use this scan</small></button>
+<button class="candidate" data-scan="1"><span class="avatar m">M</span><b>Melissa</b><small>use this scan</small></button>
+<button class="candidate" data-scan="2"><span class="avatar j">J</span><b>Jack</b><small>use this scan</small></button>
+</div>
+<label class="big-label" for="rotationSlider">Finger rotation <output id="rotationOutput">0°</output></label>
+<input id="rotationSlider" max="35" min="-35" type="range" value="0"/>
+<label class="big-label" for="thresholdSlider">Acceptance threshold <output id="thresholdOutput">65%</output></label>
+<input id="thresholdSlider" max="90" min="35" type="range" value="65"/>
+<button class="btn primary full" id="rescanButton">Scan again</button>
+<div class="fact-box compact">Same person usually gives a higher score. Different people give a lower score. Angle and quality can also change the result.</div>
+</div>
+</div>
+<div class="page-actions"><button class="btn subtle" data-go="3">← Previous</button><button class="btn primary" data-go="5">Uses &amp; Q&amp;A →</button></div>
+</section>
+<!-- PAGE 6 -->
+<section class="page" data-view="5">
+<div class="page-head">
+<div class="eyebrow">PAGE 6 · USES, QUESTIONS, AND THE MORAL</div>
+<h2 class="clean-heading">Where is this used, and what should we remember?</h2>
+<p>Fingerprint devices are helpful, but users should also understand privacy, storage, and limits.</p>
+</div>
+<div class="image-row three uses-row">
+<div class="card use-card active" data-use="phone"><div class="icon-wrap">📱</div><h3 class="clean-heading">Phone unlock</h3><p>Fast and personal access.</p></div>
+<div class="card use-card" data-use="door"><div class="icon-wrap">🚪</div><h3 class="clean-heading">Secure doors</h3><p>Allow or deny entry.</p></div>
+<div class="card use-card" data-use="school"><div class="icon-wrap">🧾</div><h3 class="clean-heading">Attendance</h3><p>Link a match to a stored ID.</p></div>
+</div>
+<div class="card use-detail" id="useDetail">
+<h3 class="clean-heading">Phone unlock</h3>
+<p>The device compares a new scan with templates already enrolled on the phone. If one matches, the phone unlocks.</p>
+</div>
+<div class="faq-layout">
+<div class="card moral-card">
+<div class="card-top"><span>THE MORAL</span><span>ONE SENTENCE</span></div>
+<h3 class="clean-heading">The scanner does not know your name by magic</h3>
+<p>It measures a pattern, turns it into features, compares those features, and then links a successful match to a saved identity.</p>
+<div class="moral-mini">
+<div><b>Pattern</b><span>what it sees</span></div>
+<div><b>Template</b><span>what it saves</span></div>
+<div><b>Match</b><span>what it decides</span></div>
+</div>
+</div>
+<div class="faqs">
+<details open="">
+<summary>Does the fingerprint itself contain a name?</summary>
+<p>No. The fingerprint provides a pattern. The system matches that pattern to a saved record that contains an ID or name.</p>
+</details>
+<details>
+<summary>Does the device store the whole finger?</summary>
+<p>Many systems save a template of important features rather than a full photo-like image.</p>
+</details>
+<details>
+<summary>Why can the same finger fail sometimes?</summary>
+<p>Because angle, pressure, moisture, dirt, or sensor quality may change the new scan.</p>
+</details>
+<details>
+<summary>Where is this technology used?</summary>
+<p>Phones, doors, attendance systems, banking devices, and many forms of access control.</p>
+</details>
+</div>
+</div>
+<div class="page-actions"><button class="btn subtle" data-go="4">← Previous</button><button class="btn primary" data-go="0">Start again ↺</button></div>
+</section>
+<footer>
+      Your Fingerprint — Educational simulation — No uploads, no sign-in, no real biometric collection · This site explains the logic behind fingerprint devices.
+    </footer>
+</main>
+</div>
+<script defer="" src="app.js"></script>
+<script defer="" src="site.js"></script>
+</body>
+</html>

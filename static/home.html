@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f2efe6">
+<meta name="description" content="Why does a phone recognize a fingerprint or iris? Try two interactive examples and see what the scanner measures.">
+<title>HAWIYA — How biometric recognition works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f2efe6;
+  --white: #fbfaf5;
+  --ink: #19362e;
+  --secondary: #546a5c;
+  --line: #ccd6cc;
+  --sage: #e7ede5;
+  --copper: #b96e4d;
+  --deep: #142923;
+  --mint: #a8dbc5;
+  --warn: #d68f70;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 15px/1.55 'DM Sans',sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button,input {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:focus-visible,button:focus-visible,input:focus-visible {
+  outline: 3px solid var(--copper);
+  outline-offset: 3px;
+}
+svg,canvas,img {
+  max-width: 100%;
+}
+.wrap {
+  max-width: 1280px;
+  width: calc(100% - 8%);
+  margin: auto;
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+}
+.mono {
+  font: 600 10px/1.45 'DM Mono',monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.kicker {
+  color: var(--copper);
+}
+h1,h2,h3,p {
+  margin-top: 0;
+}
+.title {
+  font-family: 'Fraunces',Georgia,serif;
+  font-weight: 400;
+  letter-spacing: -.035em;
+}
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -80px;
+  background: white;
+  padding: 10px;
+  z-index: 100;
+}
+.skip:focus {
+  top: 15px;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(242,239,230,.96);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+.header-inner {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 27px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.brand-mark {
+  border: 1px solid var(--ink);
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 23px;
+}
+.brand small {
+  display: block;
+  margin-top: 6px;
+  font-size: 8px;
+  letter-spacing: .2em;
+  color: #607368;
+}
+.header-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+}
+.header-links a {
+  font-size: 12px;
+  font-weight: 700;
+}
+.header-links a:hover {
+  color: var(--copper);
+}
+.header-links .outline {
+  border: 1px solid #a5b6a5;
+  padding: 11px 15px;
+}
+.hero {
+  padding: 54px 0 37px;
+  display: grid;
+  grid-template-columns: minmax(0,1.15fr) minmax(320px,.85fr);
+  gap: 52px;
+  align-items: center;
+}
+.hero h1 {
+  font-size: clamp(46px,5vw,75px);
+  line-height: 1.10;
+  margin: 13px 0 17px;
+}
+.hero h1 em {
+  font-weight: 400;
+  color: var(--copper);
+}
+.hero-lead {
+  font-size: clamp(16px,1.5vw,20px);
+  line-height: 1.62;
+  color: #40584c;
+  max-width: 675px;
+  margin-bottom: 20px;
+}
+.hero .action-link {
+  display: inline-flex;
+  gap: 11px;
+  align-items: center;
+  background: var(--ink);
+  padding: 12px 17px;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+.hero .action-link:hover {
+  background: #2d574b;
+}
+.hero-choices {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.hero-choices a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 19px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid #a8b9aa;
+  transition: background .2s,transform .2s;
+}
+.hero-choices a:hover {
+  transform: translateY(-2px);
+}
+.hero-choices a.primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+.hero-choices a.primary:hover {
+  background: #2a5145;
+}
+.hero-choices a.secondary {
+  background: transparent;
+  color: var(--ink);
+}
+.hero-choices a.secondary:hover {
+  background: #e6ece4;
+}
+.hero-caption {
+  color: var(--secondary);
+  font-size: 12px;
+  margin: 14px 0 0;
+  max-width: 610px;
+}
+.hero-visual {
+  margin: 0;
+  border: 1px solid #cbd4c9;
+  background: #e9ede6;
+  min-width: 0;
+}
+.hero-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2/1;
+  object-fit: cover;
+}
+.hero-visual figcaption {
+  background: #173b32;
+  color: #ecf4eb;
+  padding: 17px 21px;
+}
+.hero-visual .visual-caption-title {
+  font: 500 12px/1.5 'DM Mono',monospace;
+  letter-spacing: .06em;
+}
+.hero-visual .visual-explain {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.hero-visual .visual-explain span {
+  display: block;
+  font-size: 12px;
+  line-height: 1.42;
+  color: #c7d9cd;
+}
+.hero-visual .visual-explain strong {
+  display: block;
+  font-size: 13px;
+  color: white;
+}
+.hero-visual .visual-explain b {
+  color: #d9a285;
+  font-size: 20px;
+  font-weight: 400;
+}
+.hero {
+  grid-template-columns: minmax(0,1.05fr) minmax(370px,.95fr);
+  gap: 42px;
+}
+.hero h1 {
+  font-size: clamp(44px,4.45vw,66px);
+  line-height: 1.1;
+}
+.hero-lead {
+  max-width: 620px;
+}
+.journey {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  margin-top: 4px;
+  margin-bottom: 30px;
+}
+.journey-step {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  padding: 19px 17px 19px 0;
+  min-width: 0;
+}
+.journey-step+.journey-step {
+  border-left: 1px solid var(--line);
+  padding-left: 21px;
+}
+.journey-step b {
+  font: 600 10px 'DM Mono',monospace;
+  color: var(--copper);
+  border: 1px solid #c1cdbe;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.journey-step strong {
+  font-size: 12px;
+  display: block;
+}
+.journey-step small {
+  font-size: 11px;
+  color: #678072;
+  display: block;
+}
+.try-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+.try-head h2 {
+  font-size: clamp(31px,3vw,43px);
+  line-height: 1.14;
+  margin: 6px 0;
+}
+.try-head p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--secondary);
+  max-width: 480px;
+  margin-bottom: 3px;
+}
+.try-shell {
+  border: 1px solid #c2d0c2;
+  background: #fcfaf5;
+  overflow: hidden;
+}
+.method-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--line);
+}
+.method-tabs button {
+  border: 0;
+  background: #e8ede5;
+  color: #536c5a;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 15px;
+}
+.method-tabs button+button {
+  border-left: 1px solid var(--line);
+}
+.method-tabs button.active {
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: inset 0 -4px var(--copper);
+}
+.method-tabs button .tab-icon {
+  font-size: 23px;
+  font-weight: 400;
+}
+.method-tabs button small {
+  font-size: 10px;
+  display: block;
+  font-weight: 400;
+  color: var(--secondary);
+}
+.method {
+  display: none;
+}
+.method.active {
+  display: block;
+}
+.method-intro {
+  padding: 26px 30px 22px;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 25px;
+}
+.method-intro h3 {
+  font: 400 clamp(28px,2.6vw,36px)/1.18 'Fraunces',Georgia,serif;
+  margin: 7px 0 8px;
+}
+.method-intro p {
+  font-size: 13px;
+  color: #4f6759;
+  max-width: 720px;
+  margin-bottom: 0;
+}
+.method-intro .tag {
+  border: 1px solid #b8c9b9;
+  color: #4c6c59;
+  padding: 8px 12px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.experiment {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  min-height: 390px;
+  border-top: 1px solid #d4dcd1;
+}
+.experiment-visual {
+  background: #182e28;
+  color: #edf4e8;
+  min-width: 0;
+  padding: 22px 24px;
+}
+.experiment-controls {
+  padding: 25px 28px;
+  background: #f2f4ed;
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.step-name {
+  color: #b7d0bf;
+  font-size: 10px;
+}
+.visual-two {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 33px minmax(0,1fr);
+  gap: 9px;
+  align-items: center;
+  margin-top: 13px;
+}
+.print-card,.iris-card {
+  min-width: 0;
+}
+.print-card .sample-cap,.iris-card .sample-cap {
+  font: 500 10px 'DM Mono',monospace;
+  color: #c5dacb;
+  margin-bottom: 9px;
+}
+.visual-frame {
+  border: 1px solid #486558;
+  background: #203c34;
+  height: 218px;
+  position: relative;
+  overflow: hidden;
+}
+.visual-frame svg {
+  width: 100%;
+  height: 100%;
+}
+.visual-frame .image-eye {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.visual-frame canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.between {
+  font: 32px Georgia;
+  color: #d39d77;
+  text-align: center;
+}
+.sub-note {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #b8d0bf;
+  margin: 12px 0 0;
+}
+.test-question {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+}
+.choice {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 0 0 10px;
+}
+.choice button {
+  border: 1px solid #b8cbb9;
+  background: transparent;
+  color: #35584a;
+  padding: 10px 13px;
+  font-weight: 700;
+  font-size: 12px;
+  flex: 1;
+  min-width: 110px;
+}
+.choice button.selected {
+  color: #fff;
+  background: #24483e;
+  border-color: #24483e;
+}
+.control-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.control-title output {
+  font: 500 12px 'DM Mono',monospace;
+  color: var(--copper);
+}
+input[type=range] {
+  width: 100%;
+  accent-color: var(--copper);
+  margin: 4px 0 8px;
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #3d5b4b;
+  font-size: 12px;
+  cursor: pointer;
+}
+.check input {
+  height: 17px;
+  width: 17px;
+  accent-color: #2b594c;
+}
+.result {
+  margin-top: auto;
+  padding: 18px 19px;
+  background: white;
+  border: 1px solid #d3ded0;
+}
+.result strong {
+  font: 400 27px/1.2 'Fraunces',Georgia,serif;
+  display: block;
+  margin: 4px 0;
+}
+.result p {
+  font-size: 12px;
+  line-height: 1.58;
+  color: #50685a;
+  margin: 0;
+}
+.result .result-number {
+  font: 500 13px 'DM Mono',monospace;
+  color: #ad6442;
+}
+.result .result-number.warning {
+  color: #ad6342;
+}
+.result .result-number.good {
+  color: #317a60;
+}
+.method-end {
+  padding: 17px 28px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+}
+.method-end a {
+  font-weight: 700;
+  font-size: 13px;
+  border-bottom: 1px solid #829c8a;
+}
+.method-end small {
+  color: #6b8072;
+  font-size: 11px;
+  max-width: 430px;
+  text-align: right;
+}
+.help-note {
+  border-left: 2px solid var(--copper);
+  padding: 14px 20px;
+  margin: 21px 0 46px;
+  background: #e9eee6;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #425e4e;
+}
+.help-note strong {
+  color: #18382d;
+}
+.iris-figures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 13px;
+}
+.iris-photo {
+  border: 1px solid #4f6c5e;
+  width: 100%;
+  height: 184px;
+  object-fit: cover;
+  background: #203b34;
+}
+.strips {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 13px;
+}
+.strips canvas {
+  width: 100%;
+  height: 66px;
+  border: 1px solid #506b5c;
+  display: block;
+}
+.strip-caption {
+  font: 500 10px 'DM Mono',monospace;
+  color: #bbd1c1;
+  margin: 7px 0 0;
+}
+.iris-photo-note {
+  margin: 12px 0 0;
+  color: #bad1bf;
+  font-size: 11px;
+}
+.labs {
+  background: #e6eee5;
+  border-top: 1px solid #d2dfd1;
+  padding: 55px 0 70px;
+}
+.labs-intro {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  align-items: end;
+  margin-bottom: 22px;
+}
+.labs-intro h2 {
+  font: 400 clamp(32px,3.4vw,49px)/1.15 'Fraunces',Georgia,serif;
+  margin: 8px 0;
+}
+.labs-intro p {
+  color: #577063;
+  font-size: 13px;
+  max-width: 450px;
+}
+.lab-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 17px;
+}
+.lab {
+  border: 1px solid #c7d7c8;
+  background: #fafaf4;
+  display: grid;
+  grid-template-columns: 43% 57%;
+  min-width: 0;
+}
+.lab img {
+  width: 100%;
+  height: 100%;
+  min-height: 210px;
+  object-fit: cover;
+}
+.lab-body {
+  padding: 27px 25px;
+}
+.lab-body h3 {
+  font: 400 29px/1.18 'Fraunces',Georgia,serif;
+  margin: 5px 0 10px;
+}
+.lab-body p {
+  font-size: 12px;
+  color: #536c5c;
+  line-height: 1.68;
+}
+.lab-body a {
+  font-weight: 700;
+  font-size: 12px;
+  border-bottom: 1px solid #8ba694;
+}
+.footer {
+  background: #142821;
+  color: #d8e4d8;
+  padding: 22px 0;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  gap: 20px;
+}
+@media(max-width:1030px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .hero-visual {
+    max-width: 780px;
+  }
+  .experiment {
+    grid-template-columns: 1fr;
+  }
+  .experiment-controls {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .lab {
+    grid-template-columns: 1fr;
+  }
+  .lab img {
+    height: 190px;
+    min-height: 0;
+  }
+}
+@media(max-width:680px) {
+  .wrap {
+    width: calc(100% - 30px);
+  }
+  .header-inner {
+    min-height: 69px;
+  }
+  .header-links {
+    gap: 10px;
+  }
+  .header-links a:first-child {
+    display: none;
+  }
+  .header-links a {
+    font-size: 10px;
+  }
+  .header-links .outline {
+    padding: 8px;
+  }
+  .brand {
+    font-size: 18px;
+  }
+  .brand-mark {
+    height: 34px;
+    width: 34px;
+    font-size: 20px;
+  }
+  .brand small {
+    font-size: 7px;
+  }
+  .hero {
+    padding: 35px 0 26px;
+  }
+  .hero h1 {
+    font-size: clamp(39px,9vw,54px);
+  }
+  .hero-lead {
+    font-size: 16px;
+  }
+  .journey {
+    grid-template-columns: 1fr 1fr;
+  }
+  .journey-step {
+    padding: 13px 8px;
+  }
+  .journey-step:nth-child(3) {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding-left: 0;
+  }
+  .journey-step:nth-child(4) {
+    border-top: 1px solid var(--line);
+  }
+  .method-tabs button {
+    min-height: 66px;
+    font-size: 14px;
+    padding: 10px;
+  }
+  .method-intro {
+    padding: 21px 17px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .method-intro h3 {
+    font-size: 27px;
+  }
+  .experiment-visual {
+    padding: 19px 14px;
+  }
+  .experiment-controls {
+    padding: 21px 17px;
+  }
+  .visual-frame {
+    height: 175px;
+  }
+  .visual-two {
+    grid-template-columns: 1fr 19px 1fr;
+    gap: 5px;
+  }
+  .between {
+    font-size: 21px;
+  }
+  .iris-photo {
+    height: 155px;
+  }
+  .strips canvas {
+    height: 59px;
+  }
+  .method-end {
+    padding: 17px;
+    flex-direction: column;
+    align-items: start;
+  }
+  .method-end small {
+    text-align: left;
+  }
+  .labs-intro {
+    display: block;
+  }
+  .lab-grid {
+    grid-template-columns: 1fr;
+  }
+  .lab {
+    grid-template-columns: 40% 60%;
+  }
+  .lab img {
+    height: 100%;
+    min-height: 210px;
+  }
+  .lab-body {
+    padding: 19px;
+  }
+  .lab-body h3 {
+    font-size: 24px;
+  }
+}
+@media(max-width:410px) {
+  .lab {
+    grid-template-columns: 1fr;
+  }
+  .lab img {
+    height: 170px;
+    min-height: 0;
+  }
+  .header-links a:nth-child(2) {
+    display: none;
+  }
+}
+@media(max-width:680px) {
+  .hero {
+    gap: 26px;
+  }
+  .hero-choices {
+    gap: 8px;
+  }
+  .hero-choices a {
+    flex: 1 1 155px;
+    padding: 12px;
+  }
+  .hero-visual figcaption {
+    padding: 15px;
+  }
+  .hero-visual .visual-explain {
+    gap: 6px;
+  }
+  .hero-visual .visual-explain span {
+    font-size: 11px;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header"><div class="wrap header-inner"><a class="brand" href="/" aria-label="HAWIYA home"><span class="brand-mark" aria-hidden="true">◉</span><span>HAWIYA<small>THE BIOMETRICS PROJECT</small></span></a><nav class="header-links" aria-label="Navigation"><a href="#try">Try it</a><a href="/fingerprint/">Fingerprint Lab</a><a class="outline" href="/iris">Iris Lab</a></nav></div></header>
+<main id="main">
+<section class="wrap hero" aria-labelledby="headline">
+  <div class="hero-copy">
+    <span class="mono kicker">HAWIYA / BIOMETRIC RECOGNITION</span>
+    <h1 class="title" id="headline">How can a device <em>recognize you?</em></h1>
+    <p class="hero-lead">When you unlock a device, it doesn't read your name. It measures the ridges of your fingerprint or the texture of your iris, turns those details into a digital template, and compares each new scan with the saved reference.</p>
+    <p class="hero-caption"><strong>Two different patterns. The same basic idea: measure, save, compare.</strong> Try both below.</p>
+    <div class="hero-choices"><a href="#try" class="primary" data-try="fingerprint">Try fingerprint <span aria-hidden="true">↓</span></a><a href="#try" class="secondary" data-try="iris">Try iris <span aria-hidden="true">↓</span></a></div>
+  </div>
+  <figure class="hero-visual">
+    <img src="/static/assets/biometric_hero.webp" width="1450" height="725" alt="Enlarged fingertip ridges and an iris, with their distinct features traced into digital measurements" fetchpriority="high" decoding="async">
+    <figcaption><div class="visual-caption-title">TWO SOURCES OF BIOMETRIC FEATURES</div><div class="visual-explain"><div><strong>Fingerprint</strong><span>Ridge endings and splits</span></div><b aria-hidden="true">+</b><div><strong>Iris</strong><span>Texture and learned features</span></div></div></figcaption>
+  </figure>
+</section>
+<div class="wrap journey" aria-label="How biometric recognition works"><div class="journey-step"><b>01</b><div><strong>Capture</strong><small>Read the fingerprint or iris</small></div></div><div class="journey-step"><b>02</b><div><strong>Measure features</strong><small>Find distinctive details</small></div></div><div class="journey-step"><b>03</b><div><strong>Store a template</strong><small>Keep a digital reference</small></div></div><div class="journey-step"><b>04</b><div><strong>Compare</strong><small>Check the next scan</small></div></div></div>
+<section class="wrap" id="try" aria-labelledby="try-title"><div class="try-head"><div><span class="mono kicker">TRY IT YOURSELF</span><h2 class="title" id="try-title">Would the next scan look the same?</h2></div><p>Choose a method. First compare two readings of the same pattern, then try a different one. Watch which measurements change.</p></div>
+<div class="try-shell">
+<div class="method-tabs" role="tablist" aria-label="Choose a biometric method"><button id="tab-fingerprint" type="button" role="tab" aria-selected="true" aria-controls="panel-fingerprint" class="active"><span class="tab-icon" aria-hidden="true">⌁</span><span>Fingerprint<small>Compare ridge landmarks</small></span></button><button id="tab-iris" type="button" role="tab" aria-selected="false" aria-controls="panel-iris"><span class="tab-icon" aria-hidden="true">◉</span><span>Iris<small>Compare sampled texture</small></span></button></div>
+<section id="panel-fingerprint" class="method active" role="tabpanel" aria-labelledby="tab-fingerprint"><div class="method-intro"><div><span class="mono kicker">FINGERPRINT</span><h3>Even the same finger can land differently.</h3><p>The reader measures where fingerprint ridges end or split. When the finger rotates, those points move. The software aligns the new reading with the saved one before comparing them.</p></div><span class="mono tag">SIMULATED LANDMARKS</span></div>
+<div class="experiment"><div class="experiment-visual"><span class="mono step-name">WHAT THE SCANNER COMPARES</span><div class="visual-two"><div class="print-card"><div class="sample-cap">SAVED FINGERPRINT TEMPLATE</div><div class="visual-frame"><svg id="finger-ref" viewBox="0 0 300 220" role="img" aria-label="Saved fingerprint ridge landmark positions"><g id="finger-ref-grid"></g><g id="finger-ref-dots"></g></svg></div></div><span class="between" aria-hidden="true">↔</span><div class="print-card"><div class="sample-cap">NEW FINGERPRINT SCAN</div><div class="visual-frame"><svg id="finger-new" viewBox="0 0 300 220" role="img" aria-label="New rotated fingerprint landmark positions"><g id="finger-new-grid"></g><g id="finger-aligned-dots"></g><g id="finger-new-dots"></g></svg></div></div></div><p class="sub-note">Orange points show the scanned position. Turn on alignment to see corrected positions in mint. Each point represents a ridge ending or split in this teaching example.</p></div>
+<div class="experiment-controls"><p class="test-question">Is this a scan of the same finger?</p><div class="choice" role="group" aria-label="Choose fingerprint sample"><button id="finger-same" type="button" class="selected" aria-pressed="true">Same finger</button><button id="finger-other" type="button" aria-pressed="false">Different finger</button></div><label class="control-title" for="finger-angle">Rotate the scan <output id="finger-angle-val">24°</output></label><input id="finger-angle" type="range" min="0" max="55" value="24" step="1"><label class="check" for="finger-align"><input type="checkbox" id="finger-align"> Align the new scan before comparing</label><div class="result" aria-live="polite"><span class="mono">MATCHING LANDMARKS</span><strong id="finger-result">—</strong><span class="result-number" id="finger-number">—</span><p id="finger-note">Computing the landmark positions.</p></div></div></div><div class="method-end"><a href="/fingerprint/">How fingerprint scanners work →</a><small>Teaching model: not an actual fingerprint verification or security score.</small></div></section>
+<section id="panel-iris" class="method" role="tabpanel" aria-labelledby="tab-iris" hidden><div class="method-intro"><div><span class="mono kicker">IRIS</span><h3>The iris is a ring. The computer needs a flat pattern.</h3><p>The pupil and outer iris mark the ring to read. Software samples those pixels around the circle and lays them out as a rectangle, so the texture can be measured and compared.</p></div><span class="mono tag">REAL PHOTOS · LIVE PIXELS</span></div>
+<div class="experiment"><div class="experiment-visual"><span class="mono step-name">THE TWO EYE PHOTOGRAPHS</span><div class="iris-figures"><div class="iris-card"><div class="sample-cap">SAVED REFERENCE EYE</div><canvas id="iris-ref-eye" class="iris-photo" width="320" height="184" role="img" aria-label="Reference blue iris and measured boundary"></canvas></div><div class="iris-card"><div class="sample-cap">NEW EYE PHOTOGRAPH</div><canvas id="iris-new-eye" class="iris-photo" width="320" height="184" role="img" aria-label="New iris and adjustable boundary"></canvas></div></div><div class="strips"><div><span class="mono step-name">REFERENCE TEXTURE</span><canvas id="iris-ref-strip" width="224" height="64" role="img" aria-label="Normalized reference iris texture"></canvas></div><div><span class="mono step-name">NEW TEXTURE</span><canvas id="iris-new-strip" width="224" height="64" role="img" aria-label="Normalized new iris texture"></canvas></div></div><p class="iris-photo-note">Each strip is calculated from image pixels, not a prerecorded animation.</p></div>
+<div class="experiment-controls"><p class="test-question">Is the new photo from the same eye?</p><div class="choice" role="group" aria-label="Choose iris photo"><button id="iris-same" type="button" class="selected" aria-pressed="true">Same eye photo</button><button id="iris-other" type="button" aria-pressed="false">Different eye photo</button></div><label class="control-title" for="iris-edge">Move the detected iris edge <output id="iris-edge-val">0 px</output></label><input id="iris-edge" type="range" min="-45" max="45" step="5" value="0"><div class="result" aria-live="polite"><span class="mono">AVERAGE TEXTURE PIXEL DIFFERENCE</span><strong id="iris-result">Loading photographs…</strong><span class="result-number" id="iris-number">—</span><p id="iris-note">The result changes when the sampled iris pixels change.</p></div></div></div><div class="method-end"><a href="/iris">How iris recognition works →</a><small>Pixel differences illustrate normalization. Iris Lab uses YOLO and ArcIris for feature extraction.</small></div></section>
+</div>
+<div class="help-note"><strong>Why does this work?</strong> A biometric check doesn't simply look for two identical pictures. A fingerprint reader compares ridge landmarks after alignment. An iris system first isolates and normalizes the colored ring, then compares the features extracted from that texture. Both start with a stored reference and a new scan.</div></section>
+<section class="labs" id="learn"><div class="wrap"><div class="labs-intro"><div><span class="mono kicker">UNDER THE HOOD</span><h2>Want to see the full process?</h2></div><p>The examples above show the central idea. Each lab goes through how the sensor captures the pattern, which details are measured, and how matching works.</p></div><div class="lab-grid"><article class="lab"><img src="/fingerprint/assets/feature-analysis.webp" loading="lazy" alt="Fingerprint ridge detail with feature marks"><div class="lab-body"><h3>Fingerprint Lab</h3><p>Optical, capacitive and ultrasonic readers, ridge endings, bifurcations, and matching despite different finger positions.</p><a href="/fingerprint/">Explore fingerprint recognition →</a></div></article><article class="lab"><img src="/static/assets/hero_eye.png" loading="lazy" alt="Close-up of an iris"><div class="lab-body"><h3>Iris Lab</h3><p>YOLO detection, the geometry of the iris and pupil, rubber-sheet normalization, ArcIris features and cosine similarity.</p><a href="/iris">Explore iris recognition →</a></div></article></div></div></section>
+</main>
+<footer class="footer"><div class="wrap footer-inner"><span>HAWIYA · Biometric Recognition</span><span>Fingerprint and Iris Labs</span></div></footer>
+<script>
+'use strict';
+(() => {
+  const $ = id => document.getElementById(id);
+  // The two panels share the same explanation, not the same recognition algorithm.
+  function chooseTab(name) {
+    for (const tab of ['fingerprint', 'iris']) {
+      const on = tab === name;
+      $('tab-' + tab).classList.toggle('active', on);
+      $('tab-' + tab).setAttribute('aria-selected', String(on));
+      $('panel-' + tab).classList.toggle('active', on);
+      $('panel-' + tab).hidden = !on;
+    }
+  }
+  $('tab-fingerprint').addEventListener('click', () => chooseTab('fingerprint'));
+  $('tab-iris').addEventListener('click', () => chooseTab('iris'));
+  document.querySelectorAll('[data-try]').forEach(link => link.addEventListener('click', () => chooseTab(link.dataset.try)));
+  for (const name of ['fingerprint', 'iris']) $('tab-' + name).addEventListener('keydown', ev => {
+    if (ev.key !== 'ArrowLeft' && ev.key !== 'ArrowRight') return;
+    ev.preventDefault(); const next = name === 'iris' ? 'fingerprint' : 'iris'; chooseTab(next); $('tab-' + next).focus();
+  });
+  const ns = 'http://www.w3.org/2000/svg';
+  function shape(g, tag, attrs) { const n = document.createElementNS(ns, tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, String(v)); g.appendChild(n); return n }
+  const basePoints = [[61, 53, 'end'], [112, 40, 'fork'], [155, 74, 'end'], [214, 48, 'fork'], [258, 86, 'end'], [54, 112, 'fork'], [110, 106, 'end'], [159, 130, 'fork'], [228, 132, 'end'], [83, 174, 'end'], [148, 181, 'fork'], [237, 176, 'end']];
+  const otherPoints = basePoints.map(([x, y, t], i) => [Math.max(26, Math.min(273, x + 27 * Math.sin(i * 2.3 + .1))), Math.max(28, Math.min(200, y + 32 * Math.cos(i * 1.8 + .7))), i % 3 === 0 ? (t === 'end' ? 'fork' : 'end') : t]);
+  function mark(g, x, y, t, color) { if (t === 'end') shape(g, 'circle', { cx: x, cy: y, r: 5, fill: color }); else shape(g, 'rect', { x: x - 4.3, y: y - 4.3, width: 8.6, height: 8.6, transform: `rotate(45 ${x} ${y})`, fill: color }) }
+  function grid(g) { for (let x = 25; x <= 300; x += 25)shape(g, 'line', { x1: x, y1: 0, x2: x, y2: 220, stroke: '#315449', 'stroke-width': .65 }); for (let y = 20; y < 220; y += 25)shape(g, 'line', { x1: 0, y1: y, x2: 300, y2: y, stroke: '#315449', 'stroke-width': .65 }) }
+  grid($('finger-ref-grid')); grid($('finger-new-grid'));
+  basePoints.forEach(([x, y, t]) => mark($('finger-ref-dots'), x, y, t, '#d8f0df'));
+  let sameFinger = true;
+  const refCx = 150, refCy = 110;
+  function fingerCandidate(angleDegrees, align) {
+    const angle = angleDegrees * Math.PI / 180;
+    const src = sameFinger ? basePoints : otherPoints;
+    return src.map(([x, y, t], i) => {
+      const jitterX = .9 * Math.sin(i * 2.27), jitterY = .9 * Math.cos(i * 1.95);
+      const vx = x - refCx, vy = y - refCy;
+      const rx = refCx + vx * Math.cos(angle) - vy * Math.sin(angle) + jitterX;
+      const ry = refCy + vx * Math.sin(angle) + vy * Math.cos(angle) + jitterY;
+      if (!align) return [rx, ry, t];
+      const u = rx - refCx - jitterX, v = ry - refCy - jitterY;
+      return [refCx + u * Math.cos(-angle) - v * Math.sin(-angle) + jitterX, refCy + u * Math.sin(-angle) + v * Math.cos(-angle) + jitterY, t];
+    });
+  }
+  function markAligned(g, x, y, t) {
+    if (t === 'end') shape(g, 'circle', { cx: x, cy: y, r: 8, fill: 'none', stroke: '#a8e9ca', 'stroke-width': 2.2, 'stroke-dasharray': '3 3' });
+    else shape(g, 'rect', { x: x - 7, y: y - 7, width: 14, height: 14, transform: `rotate(45 ${x} ${y})`, fill: 'none', stroke: '#a8e9ca', 'stroke-width': 2, 'stroke-dasharray': '3 3' });
+  }
+  function fingerCount(candidate) {
+    const used = new Set(); let matched = 0;
+    for (const [x, y, t] of basePoints) {
+      let found = -1, near = 9;
+      candidate.forEach(([px, py, pt], i) => { if (used.has(i) || pt !== t) return; let distance = Math.hypot(x - px, y - py); if (distance < near) { near = distance; found = i } });
+      if (found >= 0) { used.add(found); matched++ }
+    }
+    return matched;
+  }
+  function renderFinger() {
+    const angle = Number($('finger-angle').value), aligned = $('finger-align').checked;
+    $('finger-angle-val').textContent = angle + '°';
+    // Always draw the actual rotated scan; alignment changes the comparison, not the raw scan.
+    const rotated = fingerCandidate(angle, false);
+    const corrected = aligned ? fingerCandidate(angle, true) : rotated;
+    const g = $('finger-new-dots'); g.replaceChildren(); rotated.forEach(([x, y, t]) => mark(g, x, y, t, '#df9c77'));
+    const guide = $('finger-aligned-dots'); guide.replaceChildren();
+    if (aligned) corrected.forEach(([x, y, t]) => markAligned(guide, x, y, t));
+    const count = fingerCount(corrected); $('finger-result').textContent = count + ' of ' + basePoints.length + ' landmarks';
+    $('finger-number').textContent = count >= 9 ? 'Pattern consistent (demo)' : 'Pattern does not line up (demo)';
+    $('finger-number').className = 'result-number ' + (count >= 9 ? 'good' : 'warning');
+    $('finger-note').textContent = !aligned ? 'Move the slider to rotate the orange scan. Switch on alignment to compare corrected positions.' : sameFinger ? 'The mint outlines show where the rotated scan is aligned for comparison.' : 'Even after alignment, this scan has different ridge landmarks.';
+  }
+  function setFinger(which) { sameFinger = which === 'same'; for (const x of ['same', 'other']) { $('finger-' + x).classList.toggle('selected', x === which); $('finger-' + x).setAttribute('aria-pressed', String(x === which)) } renderFinger() }
+  $('finger-same').addEventListener('click', () => setFinger('same'));
+  $('finger-other').addEventListener('click', () => setFinger('other'));
+  $('finger-angle').addEventListener('input', renderFinger);
+  $('finger-align').addEventListener('change', renderFinger); renderFinger();
+  // Iris: compute new rectangular strips from the pixel data of two genuine photographs.
+  const irisFiles = { blue: { url: '/static/assets/blue_eye_demo.webp', box: null, fallbackUrl: '/api/samples/original', fallbackBox: [256, 168, 1198, 1109], geo: { ix: 489.51, iy: 477.69, ir: 188.54, px: 485.72, py: 467.54, pr: 56.5 }, baseW: 942 }, green: { url: '/static/gallery/green.jpg', box: [268, 55, 1349, 1137], geo: { ix: 532.84, iy: 557.88, ir: 225.43, px: 521.14, py: 538.99, pr: 57.94 }, baseW: 1081 } };
+  const loaded = {}; let sameIris = true;
+  async function loadEye(key) {
+    return new Promise((resolve, reject) => {
+      const record = irisFiles[key], source = new Image(); let usingFallback = false;
+      source.onload = () => {
+        try {
+          const square = document.createElement('canvas'); square.width = 320; square.height = 320;
+          const sc = square.getContext('2d', { willReadFrequently: true });
+          const crop = usingFallback ? record.fallbackBox : record.box;
+          if (crop) { const [x1, y1, x2, y2] = crop; sc.drawImage(source, x1, y1, x2 - x1, y2 - y1, 0, 0, 320, 320) }
+          else sc.drawImage(source, 0, 0, 320, 320);
+          const scale = 320 / record.baseW;
+          loaded[key] = { image: square, pixels: sc.getImageData(0, 0, 320, 320), geo: Object.fromEntries(Object.entries(record.geo).map(([k, v]) => [k, v * scale])) }; resolve();
+        } catch (error) { reject(error) }
+      };
+      source.onerror = () => {
+        if (!usingFallback && record.fallbackUrl) { usingFallback = true; source.src = record.fallbackUrl; return }
+        reject(new Error('Could not load ' + key + ' iris photograph'));
+      };
+      source.src = record.url;
+    });
+  }
+  function showIris(canvasId, rec, off) {
+    const canvas = $(canvasId), ctx = canvas.getContext('2d'); ctx.fillStyle = '#203a33'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const sc = canvas.width / 320, dx = 0, dy = (canvas.height - 320 * sc) / 2;
+    ctx.drawImage(rec.image, dx, dy, 320 * sc, 320 * sc); const g = rec.geo;
+    for (const [x, y, r, color, dashed] of [[g.ix, g.iy, g.ir + off, '#dc9f7f', false], [g.px, g.py, g.pr, '#c5ecd6', true]]) {
+      ctx.beginPath(); ctx.arc(dx + x * sc, dy + y * sc, r * sc, 0, 2 * Math.PI); ctx.setLineDash(dashed ? [4, 4] : []); ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.stroke(); ctx.setLineDash([]);
+    }
+  }
+  function unroll(rec, offset, id) {
+    const canvas = $(id), ctx = canvas.getContext('2d'), w = canvas.width, h = canvas.height, data = ctx.createImageData(w, h), src = rec.pixels.data, g = rec.geo;
+    const outer = Math.max(g.pr + 7, g.ir + offset);
+    for (let row = 0; row < h; row++) {
+      const rho = .11 + .61 * row / (h - 1);
+      for (let x = 0; x < w; x++) {
+        const ang = 2 * Math.PI * x / w, c = Math.cos(ang), s = Math.sin(ang);
+        const xp = (1 - rho) * (g.px + g.pr * c) + rho * (g.ix + outer * c), yp = (1 - rho) * (g.py + g.pr * s) + rho * (g.iy + outer * s);
+        const fx = Math.min(318.999, Math.max(0, xp)), fy = Math.min(318.999, Math.max(0, yp));
+        const a = Math.floor(fx), b = Math.floor(fy), tx = fx - a, ty = fy - b, index = (row * w + x) * 4;
+        for (let ch = 0; ch < 3; ch++) {
+          const p00 = src[(b * 320 + a) * 4 + ch], p10 = src[(b * 320 + a + 1) * 4 + ch], p01 = src[((b + 1) * 320 + a) * 4 + ch], p11 = src[((b + 1) * 320 + a + 1) * 4 + ch];
+          data.data[index + ch] = (1 - ty) * ((1 - tx) * p00 + tx * p10) + ty * ((1 - tx) * p01 + tx * p11);
+        }
+        data.data[index + 3] = 255;
+      }
+    }
+    ctx.putImageData(data, 0, 0); return data;
+  }
+  function renderIris() {
+    if (!loaded.blue || !loaded.green) return;
+    const current = sameIris ? loaded.blue : loaded.green, offset = Number($('iris-edge').value);
+    $('iris-edge-val').textContent = (offset > 0 ? '+' : '') + offset + ' px';
+    showIris('iris-ref-eye', loaded.blue, 0); showIris('iris-new-eye', current, offset);
+    const a = unroll(loaded.blue, 0, 'iris-ref-strip'), b = unroll(current, offset, 'iris-new-strip');
+    let sum = 0; for (let i = 0; i < a.data.length; i += 4) { const g1 = .299 * a.data[i] + .587 * a.data[i + 1] + .114 * a.data[i + 2]; const g2 = .299 * b.data[i] + .587 * b.data[i + 1] + .114 * b.data[i + 2]; sum += Math.abs(g1 - g2) }
+    const avg = sum / (a.data.length / 4);
+    $('iris-result').textContent = avg.toFixed(1) + ' / 255';
+    $('iris-number').textContent = avg < 1 ? 'Same sampled pixels' : 'Sampled textures are different';
+    $('iris-number').className = 'result-number ' + (avg < 1 ? 'good' : 'warning');
+    $('iris-note').textContent = offset !== 0 && sameIris ? 'Same eye photograph, but moving the boundary changes which pixels are read.' : !sameIris ? 'The other photograph produces a different texture strip. Pixel differences alone are not identity verification.' : 'The same photo and same boundaries produce the same flat strip.';
+  }
+  function setIris(which) { sameIris = which === 'same'; for (const x of ['same', 'other']) { $('iris-' + x).classList.toggle('selected', x === which); $('iris-' + x).setAttribute('aria-pressed', String(x === which)) } renderIris() }
+  $('iris-same').addEventListener('click', () => setIris('same')); $('iris-other').addEventListener('click', () => setIris('other'));
+  $('iris-edge').addEventListener('input', renderIris);
+  Promise.all([loadEye('blue'), loadEye('green')]).then(renderIris).catch(() => {
+    $('iris-result').textContent = 'Photos unavailable'; $('iris-note').textContent = 'Reload the page after checking the eye image assets.';
+  });
+})();
+</script>
+</body></html>

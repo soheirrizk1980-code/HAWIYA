@@ -22,7 +22,7 @@ RUN python -m pip install --upgrade pip && \
 COPY requirements.deploy.txt ./
 RUN python -m pip install -r requirements.deploy.txt
 
-COPY server.py engine.py PREPARE_SAMPLES.py FETCH_REAL_EYES.py ./
+COPY server.py engine.py ./
 COPY static/ ./static/
 COPY hawiya_eye_stock.jpg ./hawiya_eye_stock.jpg
 
@@ -31,4 +31,4 @@ USER 10001:10001
 EXPOSE 8800
 HEALTHCHECK --interval=30s --timeout=8s --start-period=40s --retries=3 \
   CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8800/api/status', timeout=6)" || exit 1
-CMD ["python", "-m", "uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8800", "--workers", "1"]
+CMD ["sh", "-c", "python -u server.py --ensure-blue && exec python -m uvicorn server:app --host 0.0.0.0 --port 8800 --workers 1"]
